@@ -8,6 +8,7 @@ import { discoverClaudeDirs } from './accounts/detect';
 import { parseAllowedHosts } from './http/guard';
 import { parseRemoteConfig, type RemoteConfig } from './http/remote';
 import { parseGithubRepo } from './updates/checker';
+import { type FixedRoom, parseFixedRooms } from './model/rooms';
 import { tr } from '../shared/i18n';
 
 export interface ServerConfig {
@@ -38,6 +39,8 @@ export interface ServerConfig {
   terminal: boolean;
   /** HABBLAUD_ONLY_DIRS: pastas (separadas por vírgula ou ;) cujas sessões aparecem; vazio = todas. */
   onlyDirs: string[];
+  /** HABBLAUD_FIXED_ROOMS: salas que existem sempre ("Nome=pasta;Nome=pasta"), na ordem dada. */
+  fixedRooms: FixedRoom[];
   /**
    * Mensagens pelo escritório (POST /api/messages e a caixa de entrada do plugin habblaud-mensagens) ligadas: a
    * trava do terminal e HABBLAUD_MENSAGENS sem desligar (ver messagesOffReason).
@@ -172,6 +175,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env, argv: string[] 
     allowedHosts: parseAllowedHosts(env.HABBLAUD_ALLOWED_HOSTS),
     terminal: terminalOffReason(env, host, inDocker) === undefined,
     onlyDirs: (env.HABBLAUD_ONLY_DIRS ?? '').split(/[,;]/).map((d) => d.trim()).filter(Boolean),
+    fixedRooms: parseFixedRooms(env.HABBLAUD_FIXED_ROOMS),
     messages: messagesOffReason(env, host, inDocker) === undefined,
     timeline: !env.HABBLAUD_TIMELINE?.trim() || isTruthy(env.HABBLAUD_TIMELINE),
     rootDir,

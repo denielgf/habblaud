@@ -1724,6 +1724,7 @@ export const ES: Readonly<Record<string, string>> = {
   "desligado (HABBLAUD_CODEX=0)": "desactivado (HABBLAUD_CODEX=0)",
   "   Modo demonstração ligado (agentes simulados misturados aos reais).": "   Modo demostración activado (agentes simulados mezclados con los reales).",
   "   Pastas: só as sessões de {0} (HABBLAUD_ONLY_DIRS).": "   Carpetas: solo las sesiones de {0} (HABBLAUD_ONLY_DIRS).",
+  "   Salas fixas: {0} (HABBLAUD_FIXED_ROOMS).": "   Salas fijas: {0} (HABBLAUD_FIXED_ROOMS).",
   "   Terminal: ligado (acesso só local).": "   Terminal: activada (solo acceso local).",
   "   Terminal: desligado ({0}).": "   Terminal: desactivada ({0}).",
   "   Terminal interativo: ligado ({0}).": "   Terminal interactiva: activada ({0}).",

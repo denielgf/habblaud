@@ -6,12 +6,38 @@
  * dentro de uma delas. Compara sem diferenciar maiúsculas nem o tipo de barra (caminhos do Windows).
  */
 export function pathFilter(dirs: readonly string[]): (cwd: string) => boolean {
-  const key = (p: string) => p.trim().replace(/\\/g, '/').replace(/\/{2,}/g, '/').replace(/\/+$/, '').toLowerCase();
-  const roots = dirs.map(key).filter(Boolean);
+  const roots = dirs.map(pathKey).filter(Boolean);
   return (cwd) => {
-    const c = key(cwd);
+    const c = pathKey(cwd);
     return roots.some((r) => c === r || c.startsWith(`${r}/`));
   };
+}
+
+/** Chave para comparar pastas: barras "/", sem barra no fim, minúsculas (o Windows não diferencia). */
+export function pathKey(p: string): string {
+  return p.trim().replace(/\\/g, '/').replace(/\/{2,}/g, '/').replace(/\/+$/, '').toLowerCase();
+}
+
+/** Sala fixa (HABBLAUD_FIXED_ROOMS): existe sempre, mesmo vazia, com nome próprio. */
+export interface FixedRoom {
+  path: string;
+  name?: string;
+}
+
+/**
+ * Lê HABBLAUD_FIXED_ROOMS: entradas separadas por ";" no formato "Nome=pasta" (ou só "pasta", que usa o nome
+ * da pasta). O "=" é procurado só antes do caminho começar, então pastas com "=" no nome continuam válidas.
+ */
+export function parseFixedRooms(raw: string | undefined): FixedRoom[] {
+  return (raw ?? '')
+    .split(';')
+    .map((e) => e.trim())
+    .filter(Boolean)
+    .map((e) => {
+      const m = /^([^=\\/:]+)=(.+)$/.exec(e);
+      return m ? { name: m[1].trim(), path: m[2].trim() } : { path: e };
+    })
+    .filter((r) => r.path);
 }
 
 export function normalizeCwd(cwd: string): string {

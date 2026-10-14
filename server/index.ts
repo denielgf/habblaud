@@ -99,6 +99,7 @@ const office = new Office({
   sources: () => late.agents?.sources() ?? [],
   accountName: (id) => accounts.find(id)?.detected.name,
   allowCwd: config.onlyDirs.length ? pathFilter(config.onlyDirs) : undefined,
+  fixedRooms: config.fixedRooms,
   terminal: config.terminal,
   permissions: () => late.permissions?.snapshot() ?? new Map(),
   messages: config.messages ? () => late.messages?.reachable() ?? new Set() : undefined,
@@ -430,6 +431,7 @@ server.listen(config.port, config.host, () => {
   }
   if (office.isDemo()) log.info(tr('   Modo demonstração ligado (agentes simulados misturados aos reais).'));
   if (config.onlyDirs.length) log.info(tr('   Pastas: só as sessões de {0} (HABBLAUD_ONLY_DIRS).', [config.onlyDirs.join(', ')]));
+  if (config.fixedRooms.length) log.info(tr('   Salas fixas: {0} (HABBLAUD_FIXED_ROOMS).', [config.fixedRooms.map((r) => r.name ?? r.path).join(', ')]));
   if (config.terminal) log.info(tr('   Terminal: ligado (acesso só local).'));
   else log.info(tr('   Terminal: desligado ({0}).', [terminalOffReason(process.env, config.host, config.inDocker)]));
   log.info(ptys ? tr('   Terminal interativo: ligado ({0}).', [claudeBin]) : tr('   Terminal interativo: {0}.', [ptyOff ?? tr('desligado')]));

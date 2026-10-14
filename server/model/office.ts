@@ -30,7 +30,7 @@ import { describeGitHubEvent, githubEventKey, RoomEffects, type GitHubEvent } fr
 import { hash32 } from '../../shared/hash';
 import { applyPermission } from '../permissions/registry';
 import type { NameStore, StoredCharacter } from './names';
-import { normalizeCwd, roomDisplayNames, SlotAllocator } from './rooms';
+import { type FixedRoom, normalizeCwd, pathKey, roomDisplayNames, SlotAllocator } from './rooms';
 import { tr } from '../../shared/i18n';
 
 export const OFFLINE_GRACE_MS = 20_000;
@@ -66,6 +66,8 @@ export interface OfficeDeps {
   accountName: (id: string) => string | undefined;
   /** Filtro de pastas (HABBLAUD_ONLY_DIRS): sessões de outras pastas não entram no escritório. */
   allowCwd?: (cwd: string) => boolean;
+  /** Salas fixas (HABBLAUD_FIXED_ROOMS): existem desde o início, nesta ordem, e não somem quando esvaziam. */
+  fixedRooms?: readonly FixedRoom[];
   /** Terminal ligado (ver OfficeSnapshot.meta.terminal e ServerConfig.terminal). */
   terminal?: boolean;
   /** Pedidos de permissão pendentes por agente (PermissionRegistry.snapshot), postos no snapshot. */
@@ -216,9 +218,21 @@ export class Office {
   private effects = new RoomEffects();
   private seq = 0;
   private readonly now: () => number;
+  /** Salas fixas: pathKey(pasta) -> id da sala, e o nome escolhido para cada uma. */
+  private fixedByKey = new Map<string, string>();
+  private fixedNames = new Map<string, string>();
 
   constructor(private readonly deps: OfficeDeps) {
     this.now = deps.now ?? Date.now;
+    const now = this.now();
+    for (const f of deps.fixedRooms ?? []) {
+      const id = normalizeCwd(f.path);
+      if (this.rooms.has(id)) continue;
+      this.rooms.set(id, { path: f.path, createdAt: now });
+      this.fixedByKey.set(pathKey(f.path), id);
+      if (f.name) this.fixedNames.set(id, f.name);
+    }
+    if (this.rooms.size) this.recomputeRoomNames();
   }
 
   /** Avisado (síncrono) sempre que algo muda; o hub decide quando fazer commit(). */
@@ -323,7 +337,8 @@ export class Office {
     }
     // Fora das pastas escolhidas: a sessão nem entra (os demais métodos ignoram ids desconhecidos).
     if (this.deps.allowCwd && !this.deps.allowCwd(p.cwd)) return;
-    const roomId = normalizeCwd(p.cwd);
+    // Sessão numa pasta de sala fixa entra nela, mesmo que o caminho venha escrito de outro jeito (barras, maiúsculas).
+    const roomId = this.fixedByKey.get(pathKey(p.cwd)) ?? normalizeCwd(p.cwd);
     this.ensureRoom(roomId, now);
     const chosen = this.roomCharacter(roomId, p.id, p.sessionId);
     // A mesma sessão retomada noutro processo (ex.: "Assumir aqui") mantém o nome, mesmo com o processo antigo
@@ -931,7 +946,8 @@ export class Office {
     if (this.effects.prune(now)) this.markDirty();
     if (removed) {
       const occupied = new Set([...this.agents.values()].map((r) => r.info.roomId));
-      for (const id of [...this.rooms.keys()]) if (!occupied.has(id)) this.rooms.delete(id);
+      const fixed = new Set(this.fixedByKey.values());
+      for (const id of [...this.rooms.keys()]) if (!occupied.has(id) && !fixed.has(id)) this.rooms.delete(id);
       this.recomputeRoomNames();
       this.markDirty();
     }
@@ -1050,7 +1066,8 @@ export class Office {
     for (const r of this.demoSnap?.rooms ?? []) paths.set(r.id, r.path);
     this.roomNames = roomDisplayNames(paths);
     for (const [id, path] of paths) {
-      const alias = this.deps.roomAlias?.(path);
+      // Nome escolhido no escritório (renomear) > nome da sala fixa > nome da pasta.
+      const alias = this.deps.roomAlias?.(path) ?? this.fixedNames.get(id);
       if (alias) this.roomNames.set(id, alias);
     }
   }
