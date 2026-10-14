@@ -36,6 +36,8 @@ export interface ServerConfig {
    * pelo próprio computador (ver terminalOffReason). É a trava de tudo o que mostra ou age sobre as sessões.
    */
   terminal: boolean;
+  /** HABBLAUD_ONLY_DIRS: pastas (separadas por vírgula ou ;) cujas sessões aparecem; vazio = todas. */
+  onlyDirs: string[];
   /**
    * Mensagens pelo escritório (POST /api/messages e a caixa de entrada do plugin habblaud-mensagens) ligadas: a
    * trava do terminal e HABBLAUD_MENSAGENS sem desligar (ver messagesOffReason).
@@ -169,6 +171,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env, argv: string[] 
     usageDir: resolve(env.HABBLAUD_USAGE_DIR?.trim() || join(home, '.habblaud', 'usage')),
     allowedHosts: parseAllowedHosts(env.HABBLAUD_ALLOWED_HOSTS),
     terminal: terminalOffReason(env, host, inDocker) === undefined,
+    onlyDirs: (env.HABBLAUD_ONLY_DIRS ?? '').split(/[,;]/).map((d) => d.trim()).filter(Boolean),
     messages: messagesOffReason(env, host, inDocker) === undefined,
     timeline: !env.HABBLAUD_TIMELINE?.trim() || isTruthy(env.HABBLAUD_TIMELINE),
     rootDir,

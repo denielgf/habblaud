@@ -1587,6 +1587,7 @@ export const FR: Readonly<Record<string, string>> = {
   "nenhuma pasta do Codex encontrada (defina HABBLAUD_CODEX_DIRS)": "aucun dossier Codex trouvé (définissez HABBLAUD_CODEX_DIRS)",
   "desligado (HABBLAUD_CODEX=0)": "désactivé (HABBLAUD_CODEX=0)",
   "   Modo demonstração ligado (agentes simulados misturados aos reais).": "   Mode démonstration activé (agents simulés mêlés aux vrais).",
+  "   Pastas: só as sessões de {0} (HABBLAUD_ONLY_DIRS).": "   Dossiers : seulement les sessions de {0} (HABBLAUD_ONLY_DIRS).",
   "   Terminal: ligado (acesso só local).": "   Terminal : activé (accès local uniquement).",
   "   Terminal: desligado ({0}).": "   Terminal : désactivé ({0}).",
   "   Linha do tempo (timelapse): gravando em {0}.": "   Chronologie (timelapse) : enregistrement dans {0}.",

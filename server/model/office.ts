@@ -64,6 +64,8 @@ export interface OfficeDeps {
   sources: () => SourceInfo[];
   /** Nome amigável da conta (ex.: "Conta D") para os avisos. */
   accountName: (id: string) => string | undefined;
+  /** Filtro de pastas (HABBLAUD_ONLY_DIRS): sessões de outras pastas não entram no escritório. */
+  allowCwd?: (cwd: string) => boolean;
   /** Terminal ligado (ver OfficeSnapshot.meta.terminal e ServerConfig.terminal). */
   terminal?: boolean;
   /** Pedidos de permissão pendentes por agente (PermissionRegistry.snapshot), postos no snapshot. */
@@ -319,6 +321,8 @@ export class Office {
       this.setStatus(p.id, p.status, p.waitingFor);
       return;
     }
+    // Fora das pastas escolhidas: a sessão nem entra (os demais métodos ignoram ids desconhecidos).
+    if (this.deps.allowCwd && !this.deps.allowCwd(p.cwd)) return;
     const roomId = normalizeCwd(p.cwd);
     this.ensureRoom(roomId, now);
     const chosen = this.roomCharacter(roomId, p.id, p.sessionId);

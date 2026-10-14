@@ -1723,6 +1723,7 @@ export const EN: Readonly<Record<string, string>> = {
   "nenhuma pasta do Codex encontrada (defina HABBLAUD_CODEX_DIRS)": "no Codex folder found (set HABBLAUD_CODEX_DIRS)",
   "desligado (HABBLAUD_CODEX=0)": "off (HABBLAUD_CODEX=0)",
   "   Modo demonstração ligado (agentes simulados misturados aos reais).": "   Demo mode on (simulated agents mixed in with the real ones).",
+  "   Pastas: só as sessões de {0} (HABBLAUD_ONLY_DIRS).": "   Folders: only sessions from {0} (HABBLAUD_ONLY_DIRS).",
   "   Terminal: ligado (acesso só local).": "   Terminal: on (local access only).",
   "   Terminal: desligado ({0}).": "   Terminal: off ({0}).",
   "   Terminal interativo: ligado ({0}).": "   Interactive terminal: on ({0}).",

@@ -1,6 +1,19 @@
 // Salas do escritório: identidade (cwd normalizado), nome exibido e posição (slot) no prédio.
 
 /** cwd normalizado: sem barras repetidas nem barra final. */
+/**
+ * Filtro de pastas (HABBLAUD_ONLY_DIRS): só entram no escritório as sessões cuja pasta é uma das listadas ou fica
+ * dentro de uma delas. Compara sem diferenciar maiúsculas nem o tipo de barra (caminhos do Windows).
+ */
+export function pathFilter(dirs: readonly string[]): (cwd: string) => boolean {
+  const key = (p: string) => p.trim().replace(/\\/g, '/').replace(/\/{2,}/g, '/').replace(/\/+$/, '').toLowerCase();
+  const roots = dirs.map(key).filter(Boolean);
+  return (cwd) => {
+    const c = key(cwd);
+    return roots.some((r) => c === r || c.startsWith(`${r}/`));
+  };
+}
+
 export function normalizeCwd(cwd: string): string {
   const p = cwd.trim().replace(/\/{2,}/g, '/');
   return p.length > 1 ? p.replace(/\/+$/, '') : p;
