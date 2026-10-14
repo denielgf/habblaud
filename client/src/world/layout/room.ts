@@ -27,6 +27,8 @@ const PLANTS_SMALL = ['fern', 'succulent', 'flower'] as const;
 // Clínica veterinária: pôsteres de pata, cachorro, cruz vet e osso (mais o gato e o café do original).
 const POSTERS = ['paw', 'dog', 'vet_cross', 'bone', 'cat', 'coffee'] as const;
 const BEANBAGS = ['red', 'blue', 'yellow', 'green'] as const;
+const CATS = ['orange', 'gray', 'black', 'white'] as const;
+const DOGS = ['caramel', 'black', 'golden', 'spotted'] as const;
 
 /** Canto de reunião (assentos extras para subagentes). */
 export type MeetingStyle = 'table' | 'round' | 'lounge';
@@ -218,7 +220,7 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
         rug(x0 + 0.5, 8.85, 4, 2, shade(theme.carpet, 0.35), room.seed + 3);
         seat('nook', 'beanbag', x0 + 1, 10, 'up', pick(BEANBAGS), { order: o + 0.4 });
         seat('nook', 'beanbag', x0 + 3, 10, 'up', pick(BEANBAGS), { order: o + 0.41 });
-        furn('plant_small', x0 + 2, 10, pick(PLANTS_SMALL), { order: o });
+        furn('pet_bed', x0 + 2, 10, CATS[room.seed % CATS.length], { order: o });
         furn('plant_tall', where === 'left' ? x0 : x0 + 4, 10, pick(PLANTS_TALL), { order: o + 0.01 });
         return;
       }
@@ -244,7 +246,7 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
         // mesa de pé com notebook (lugar de trabalho em pé, de frente para a câmera)
         furn('cafe_table', x0 + 2, 10, undefined, { order: o });
         spot('stand', x0 + 2, 9, 'down', { dy: -1 });
-        furn('plant_small', x0 + 4, 10, pick(PLANTS_SMALL), { order: o + 0.01 });
+        furn('pet_bed', x0 + 4, 10, CATS[(room.seed >> 2) % CATS.length], { order: o + 0.01 });
         furn('trash_bin', x0, 10, undefined, { order: o + 0.02 });
         return;
       }
@@ -267,7 +269,7 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
       case 'stands': {
         // pontos em pé junto ao quadro móvel/estante baixa
         furn('filing_cabinet', x0 + 4, 10, undefined, { order: o });
-        furn('plant_small', x0, 10, pick(PLANTS_SMALL), { order: o + 0.01 });
+        furn('dog_bed', x0, 10, DOGS[room.seed % DOGS.length], { order: o + 0.01 });
         spot('stand', x0 + 1, 9, 'up', { dy: -2 });
         spot('stand', x0 + 2, 9, 'up', { dy: -2 });
         return;

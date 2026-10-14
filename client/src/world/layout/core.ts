@@ -45,7 +45,8 @@ export function layoutReception(): AreaLayout {
   b.furn('plant_tall', 1, 2, 'monstera', { order: 0.2 });
   b.furn('plant_tall', 14, 4, 'ficus', { order: 0.21 });
   b.furn('reception_desk', 9, 5, undefined, { order: 0.4 });
-  b.furn('plant_small', 12, 5, 'flower', { order: 0.45 });
+  // Clínica: aquário ao lado do balcão.
+  b.furn('aquarium', 12, 5, undefined, { order: 0.45 });
   b.furn('filing_cabinet', 8, 5, undefined, { order: 0.42 });
   // cantinho de espera com poltronas
   b.seat('armchair', 'armchair', 9, 8, 'right', 'right', { order: 0.6 });
@@ -56,7 +57,8 @@ export function layoutReception(): AreaLayout {
   // banco de espera (olhando para baixo)
   const bench = b.furn('bench', 2, 7, undefined, { order: 0.5 });
   for (let i = 0; i < 2; i++) b.seat('bench', 'bench', 2 + i, 7, 'down', undefined, { noFurniture: true, furnitureId: bench });
-  b.furn('plant_small', 4, 7, 'fern', { order: 0.52 });
+  // Clínica: gato da casa dormindo ao lado do banco de espera.
+  b.furn('pet_bed', 4, 7, 'orange', { order: 0.52 });
   b.furn('water_cooler', 1, 7, undefined, { order: 0.53 });
   b.spot('water', 1, 8, 'up', { dy: -3 });
 
@@ -231,7 +233,8 @@ export function layoutLounge(): AreaLayout {
   // planta baixa sob o quadro (uma alta cobriria a pintura)
   b.furn('plant_small', 1, 2, 'fern', { order: 0.2 });
   b.furn('plant_tall', 6, 2, 'palm', { order: 0.21 });
-  b.furn('printer', 1, 10, undefined, { order: 0.3 });
+  // Clínica: cachorro da casa cochilando no canto do lounge.
+  b.furn('dog_bed', 1, 10, 'golden', { order: 0.3 });
   b.furn('floor_lamp', 1, 7, undefined, { order: 0.32 });
   b.furn('plant_tall', 14, 10, 'monstera', { order: 0.22 });
 

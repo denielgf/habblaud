@@ -1,5 +1,6 @@
 // Móveis da clínica veterinária: mesa de procedimento (inox), armário de medicamentos, balança de chão,
 // gaiolas de internação e negatoscópio de raio-x na parede. Mesma escala e luz dos móveis do escritório.
+import { ramp } from '../core/color';
 import { floorSheet, wallSheet, type BufFurniture } from '../core/sprite';
 import type { PixelBuf } from '../core/pixbuf';
 import { M, contact, frontFace, topFace } from './kit';
@@ -149,4 +150,104 @@ export function xrayViewer(): BufFurniture {
   b.outline();
   wallShadow(b, x - 1, y - 1, 16, 17);
   return { base: s };
+}
+
+// ------------------------------------------------------------------ pets (parados, como móveis)
+
+const CAT_COLORS: Readonly<Record<string, string>> = { orange: '#e8954a', gray: '#8a929e', black: '#3a3d47', white: '#eeeae2' };
+const DOG_COLORS: Readonly<Record<string, string>> = { caramel: '#c58a4f', black: '#3a3d47', golden: '#e0b46a', spotted: '#f2efe8' };
+
+/** 1x1. Caminha redonda com um gato dormindo enrolado. variants: cor do gato. */
+export function petBed(variant: string | undefined): BufFurniture {
+  const s = floorSheet(1, 1, 6);
+  const b = s.buf;
+  const cushion = ramp('#7aa6c2', 0.07);
+  // Almofada redonda com borda alta.
+  b.rect(1, 5, 14, 9, cushion.base);
+  b.rect(2, 4, 12, 11, cushion.base);
+  b.hline(2, 13, 4, cushion.lt);
+  b.hline(2, 13, 14, cushion.dk);
+  b.rect(3, 6, 10, 6, cushion.dk);
+  // Gato enrolado: corpo, cabeça à direita, orelhas, rabo dando a volta.
+  const c = ramp(CAT_COLORS[variant ?? 'orange'] ?? CAT_COLORS.orange, 0.08);
+  b.rect(3, 6, 8, 5, c.base);
+  b.rect(4, 5, 6, 7, c.base);
+  b.hline(4, 9, 5, c.lt);
+  b.rect(9, 4, 4, 4, c.base);
+  b.set(9, 3, c.dk);
+  b.set(12, 3, c.dk);
+  b.hline(10, 11, 6, c.dd);
+  b.hline(3, 10, 11, c.dk);
+  b.hline(4, 9, 12, c.dk);
+  if (variant === 'orange') for (const x of [5, 7]) b.vline(x, 6, 8, c.dk);
+  b.outline();
+  contact(b, 0, 13, 16, 3, 0.16);
+  return { base: s };
+}
+
+/** 1x1. Cachorro deitado de lado, dormindo num tapetinho. variants: pelagem. */
+export function dogBed(variant: string | undefined): BufFurniture {
+  const s = floorSheet(1, 1, 6, 6);
+  const b = s.buf;
+  // Tapetinho xadrez.
+  b.rect(-2, 6, 20, 8, '#c96f4a');
+  for (const x of [1, 5, 9, 13]) b.vline(x, 6, 13, '#b35d3c');
+  b.hline(-2, 17, 9, '#b35d3c');
+  b.hline(-2, 17, 13, '#9e4f33');
+  const f = ramp(DOG_COLORS[variant ?? 'caramel'] ?? DOG_COLORS.caramel, 0.08);
+  // Corpo, patas da frente esticadas, cabeça à esquerda e rabo.
+  b.rect(2, 4, 11, 6, f.base);
+  b.hline(3, 11, 4, f.lt);
+  b.hline(2, 12, 9, f.dk);
+  b.rect(-1, 9, 5, 2, f.base);
+  b.rect(-2, 2, 6, 6, f.base);
+  b.hline(-1, 2, 2, f.lt);
+  b.rect(1, 3, 2, 4, f.dd);
+  b.rect(-3, 5, 2, 2, f.lt);
+  b.set(-3, 5, '#2b2236');
+  b.hline(-1, 0, 4, f.dd);
+  b.rect(13, 6, 3, 1, f.base);
+  b.set(15, 5, f.base);
+  if (variant === 'spotted') {
+    b.rect(5, 5, 3, 2, '#3a3d47');
+    b.rect(9, 7, 2, 2, '#3a3d47');
+    b.rect(1, 3, 2, 4, '#3a3d47');
+  }
+  b.outline();
+  contact(b, -2, 13, 20, 3, 0.16);
+  return { base: s };
+}
+
+/** 1x1. Aquário sobre gabinete de madeira, com peixinhos, plantas e bolhas. */
+export function aquarium(): BufFurniture {
+  const s = floorSheet(1, 1, 16);
+  const b = s.buf;
+  // Gabinete.
+  topFace(b, 0, 2, 16, 3, M.walnut);
+  frontFace(b, 0, 5, 16, 11, M.walnut);
+  b.vline(7, 6, 14, M.walnut.dk);
+  b.set(5, 10, '#d9b88e');
+  b.set(9, 10, '#d9b88e');
+  // Tanque.
+  b.rect(1, -14, 14, 2, '#3a404d');
+  b.rect(1, -12, 14, 14, '#7fc8e8');
+  b.rect(1, -12, 14, 2, '#a8dcf0');
+  b.rect(1, -1, 14, 3, '#d8b98a');
+  b.hline(1, 14, -1, '#c4a172');
+  for (const [x, y0] of [[3, -7], [4, -5], [12, -6], [13, -8]] as const) b.vline(x, y0, -2, '#3f9e5a');
+  const fish: [number, number, string][] = [[7, -8, '#f08a3c'], [10, -5, '#f2d16b'], [5, -4, '#3f7fd8']];
+  for (const [x, y, c] of fish) {
+    b.rect(x, y, 2, 1, c);
+    b.set(x + 2, y, shadeTail(c));
+  }
+  b.set(11, -10, '#e8f6fd');
+  b.set(12, -8, '#e8f6fd');
+  b.vline(2, -11, -3, '#c9eaf7');
+  b.outline();
+  contact(b, 0, 13, 16, 4, 0.22);
+  return { base: s };
+}
+
+function shadeTail(c: string): string {
+  return ramp(c, 0.1).dk;
 }

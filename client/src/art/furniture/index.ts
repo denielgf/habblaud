@@ -136,6 +136,12 @@ function build(kind: FurnitureKind, variant: string | undefined, state: number, 
       return V.kennel();
     case 'xray_viewer':
       return V.xrayViewer();
+    case 'pet_bed':
+      return V.petBed(variant);
+    case 'dog_bed':
+      return V.dogBed(variant);
+    case 'aquarium':
+      return V.aquarium();
   }
 }
 

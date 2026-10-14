@@ -195,7 +195,10 @@ export type FurnitureKind =
   | 'med_cabinet' // 1x1 armário alto de medicamentos (vitrine em cima, portas com cruz verde).
   | 'pet_scale' // 1x1 balança de chão com visor digital.
   | 'kennel' // 1x1 duas gaiolas de internação empilhadas.
-  | 'xray_viewer'; // parede, 1 tile. Negatoscópio aceso com raio-x.
+  | 'xray_viewer' // parede, 1 tile. Negatoscópio aceso com raio-x.
+  | 'pet_bed' // 1x1 caminha redonda com gato dormindo. variants: 'orange' | 'gray' | 'black' | 'white'
+  | 'dog_bed' // 1x1 cachorro deitado num tapetinho. variants: 'caramel' | 'black' | 'golden' | 'spotted'
+  | 'aquarium'; // 1x1 aquário sobre gabinete.
 
 export interface FurnitureDef {
   mount: 'floor' | 'wall';
@@ -274,6 +277,9 @@ export const FURNITURE: Readonly<Record<FurnitureKind, FurnitureDef>> = {
   pet_scale: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
   kennel: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
   xray_viewer: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false },
+  pet_bed: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true, variants: ['orange', 'gray', 'black', 'white'] },
+  dog_bed: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true, variants: ['caramel', 'black', 'golden', 'spotted'] },
+  aquarium: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
 };
 
 export type FloorKind =
