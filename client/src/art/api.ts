@@ -70,7 +70,7 @@ export type HairStyle =
   | 'short' | 'buzz' | 'spiky' | 'side_part' | 'curly' | 'afro' | 'bob' | 'long' | 'ponytail' | 'bun' | 'pigtails'
   | 'mohawk' | 'bald' | 'wavy';
 
-export type TopStyle = 'tshirt' | 'hoodie' | 'shirt_tie' | 'sweater' | 'jacket' | 'blouse' | 'polo';
+export type TopStyle = 'tshirt' | 'hoodie' | 'shirt_tie' | 'sweater' | 'jacket' | 'blouse' | 'polo' | 'labcoat' | 'scrubs';
 
 export type Accessory = 'none' | 'glasses' | 'sunglasses' | 'headphones' | 'cap' | 'beanie' | 'earrings' | 'bow';
 
@@ -159,7 +159,7 @@ export type FurnitureKind =
   | 'whiteboard' // 3 tiles de largura. Quadro kanban. rects.board = área onde o render desenha post-its.
   | 'window' // 2 tiles. Janela; rects.glass = vidro (o render desenha o céu antes da moldura).
   | 'clock' // 1 tile. Relógio; rects.face = mostrador (ponteiros desenhados pelo render).
-  | 'poster' // 1 tile. variants: 'code' | 'coffee' | 'rocket' | 'cat' | 'bug' | 'ship_it'
+  | 'poster' // 1 tile. variants: 'code' | 'coffee' | 'rocket' | 'cat' | 'bug' | 'ship_it' | 'paw' | 'dog' | 'vet_cross' | 'bone'
   | 'painting' // 2 tiles. Quadro com moldura; rects.art = área da pintura (pode receber imagem gerada por IA).
   | 'tv' // 2 tiles. TV de parede; rects.tv = tela.
   | 'light_switch' // 1 tile (o sprite é pequeno). variants: 'on' | 'off'
@@ -236,7 +236,7 @@ export const FURNITURE: Readonly<Record<FurnitureKind, FurnitureDef>> = {
   whiteboard: { mount: 'wall', footprint: { w: 3, h: 0 }, blocks: false },
   window: { mount: 'wall', footprint: { w: 2, h: 0 }, blocks: false },
   clock: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false },
-  poster: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false, variants: ['code', 'coffee', 'rocket', 'cat', 'bug', 'ship_it'] },
+  poster: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false, variants: ['code', 'coffee', 'rocket', 'cat', 'bug', 'ship_it', 'paw', 'dog', 'vet_cross', 'bone'] },
   painting: { mount: 'wall', footprint: { w: 2, h: 0 }, blocks: false },
   tv: { mount: 'wall', footprint: { w: 2, h: 0 }, blocks: false },
   light_switch: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false, variants: ['on', 'off'] },

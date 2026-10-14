@@ -79,7 +79,7 @@ describe('appearanceFromSeed', () => {
       tops.add(a.topStyle);
     }
     expect(hair.size).toBe(14);
-    expect(tops.size).toBe(7);
+    expect(tops.size).toBe(TOP_STYLES.length);
   });
 
   it('respeita look (sem barba para f) e crachá para subagentes', () => {

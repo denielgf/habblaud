@@ -24,7 +24,8 @@ export interface RoomInput {
 
 const PLANTS_TALL = ['palm', 'ficus', 'monstera', 'bonsai'] as const;
 const PLANTS_SMALL = ['fern', 'succulent', 'flower'] as const;
-const POSTERS = ['code', 'coffee', 'rocket', 'cat', 'bug', 'ship_it'] as const;
+// Clínica veterinária: pôsteres de pata, cachorro, cruz vet e osso (mais o gato e o café do original).
+const POSTERS = ['paw', 'dog', 'vet_cross', 'bone', 'cat', 'coffee'] as const;
 const BEANBAGS = ['red', 'blue', 'yellow', 'green'] as const;
 
 /** Canto de reunião (assentos extras para subagentes). */

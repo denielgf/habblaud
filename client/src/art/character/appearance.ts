@@ -30,6 +30,9 @@ const SHIRT_COLORS = ['#f4f4f0', '#d3e3f4', '#f3d6de', '#dfe3e8', '#e9f1dc', '#f
 const TIE_COLORS = ['#c0392b', '#2f4c7d', '#7b2d44', '#2e7d4f', '#d9a42e', '#5b3a8c', '#3d4352'] as const;
 const JACKET_COLORS = ['#2f3b55', '#3d4352', '#6b4a35', '#55613b', '#262a33', '#b08a5e', '#7a2f3a', '#4a6a8a'] as const;
 const LIGHT_ACCENTS = ['#f4f4f0', '#e8e3d6', '#dfe7ef', '#f6e7c8', '#c9ced6'] as const;
+// Clínica: jaleco (branco, com camisa por baixo no detalhe) e pijama cirúrgico (calça da mesma cor).
+const LABCOAT_COLORS = ['#f4f6f7', '#eef3f6', '#f6f4ee'] as const;
+const SCRUB_COLORS = ['#3f9e9a', '#4a86d8', '#2f6f8f', '#5aa469', '#7a2f4a', '#8d66cf', '#2e5a88', '#e47aa8'] as const;
 const BOTTOMS = [
   ['#3f5f8c', 5], ['#2e3e5e', 4], ['#2c2c35', 4], ['#b49c72', 2], ['#6d7480', 2], ['#6e4c38', 1.5],
   ['#5f6845', 1.2], ['#2c3655', 2], ['#7f9cc4', 1.5], ['#e2ded5', 0.5], ['#9b3b3b', 0.4],
@@ -63,8 +66,8 @@ const HAIR_W: Record<'f' | 'm', Weights<HairStyle>> = {
 };
 
 const TOP_W: Record<'f' | 'm', Weights<TopStyle>> = {
-  m: { tshirt: 20, hoodie: 16, shirt_tie: 10, sweater: 13, jacket: 13, blouse: 2, polo: 14 },
-  f: { tshirt: 17, hoodie: 14, shirt_tie: 5, sweater: 14, jacket: 12, blouse: 20, polo: 8 },
+  m: { tshirt: 5, hoodie: 4, shirt_tie: 2, sweater: 3, jacket: 3, blouse: 0.5, polo: 4, labcoat: 40, scrubs: 38 },
+  f: { tshirt: 4, hoodie: 3, shirt_tie: 1, sweater: 3, jacket: 3, blouse: 5, polo: 2, labcoat: 40, scrubs: 38 },
 };
 
 const ACC_W: Record<'f' | 'm', Weights<Accessory>> = {
@@ -126,6 +129,14 @@ export function appearanceFromSeed(seed: number, opts: { look?: 'f' | 'm'; sub?:
       top = pick(JACKET_COLORS);
       topAccent = rnd() < 0.7 ? pick(LIGHT_ACCENTS) : pick(TOP_COLORS);
       break;
+    case 'labcoat':
+      top = pick(LABCOAT_COLORS);
+      topAccent = pick(TOP_COLORS);
+      break;
+    case 'scrubs':
+      top = pick(SCRUB_COLORS);
+      topAccent = pick(LIGHT_ACCENTS);
+      break;
     case 'hoodie':
     case 'polo':
       top = pick(TOP_COLORS);
@@ -161,14 +172,15 @@ export function appearanceFromSeed(seed: number, opts: { look?: 'f' | 'm'; sub?:
     top,
     topAccent,
     topStyle,
-    bottom,
+    // Pijama cirúrgico: calça da mesma cor da blusa.
+    bottom: topStyle === 'scrubs' ? top : bottom,
     shoes,
     accessory,
     accessoryColor,
     lanyard: opts.sub ? LANYARDS[Math.floor(lanyardRoll * LANYARDS.length) % LANYARDS.length] : null,
     look,
     facialHair,
-    bottomStyle,
+    bottomStyle: topStyle === 'scrubs' ? 'pants' : bottomStyle,
   };
   // Peças escolhidas no editor (por cima do sorteio, sem mudar a ordem dos sorteios). Um undefined explícito não
   // apaga a peça sorteada.
@@ -199,6 +211,10 @@ function topPalettes(style: TopStyle): { top: readonly string[]; topAccent: read
       return { top: SHIRT_COLORS, topAccent: TIE_COLORS };
     case 'jacket':
       return { top: JACKET_COLORS, topAccent: ACCENTS };
+    case 'labcoat':
+      return { top: LABCOAT_COLORS, topAccent: ACCENTS };
+    case 'scrubs':
+      return { top: SCRUB_COLORS, topAccent: LIGHT_ACCENTS };
     default:
       return { top: TOP_COLORS, topAccent: ACCENTS };
   }
@@ -217,7 +233,7 @@ export function editorOptions(a: Appearance): EditorOptions {
     top: top.top,
     topAccent: top.topAccent,
     topStyle: TOP_STYLES,
-    bottom: colorsOf(BOTTOMS),
+    bottom: uniq([...colorsOf(BOTTOMS), ...SCRUB_COLORS]),
     bottomStyle: BOTTOM_STYLES,
     shoes: colorsOf(SHOES),
     accessory: ACCESSORIES,

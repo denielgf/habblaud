@@ -85,7 +85,7 @@ const STYLE_LABELS: Partial<Record<PartKey, Readonly<Record<string, string>>>> =
   },
   topStyle: {
     tshirt: tr('Camiseta'), hoodie: tr('Moletom'), shirt_tie: tr('Camisa e gravata'), sweater: tr('Suéter'), jacket: tr('Jaqueta'),
-    blouse: tr('Blusa'), polo: 'Polo',
+    blouse: tr('Blusa'), polo: 'Polo', labcoat: tr('Jaleco'), scrubs: tr('Pijama cirúrgico'),
   },
   bottomStyle: { pants: tr('Calça'), shorts: tr('Bermuda'), skirt: tr('Saia') },
   accessory: {

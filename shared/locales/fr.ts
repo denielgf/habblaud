@@ -68,6 +68,8 @@ export const FR: Readonly<Record<string, string>> = {
   "Suéter": "Pull",
   "Jaqueta": "Veste",
   "Blusa": "Chemisier",
+  "Jaleco": "Blouse médicale",
+  "Pijama cirúrgico": "Tenue de bloc",
   "Calça": "Pantalon",
   "Bermuda": "Bermuda",
   "Saia": "Jupe",

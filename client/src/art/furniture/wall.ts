@@ -158,6 +158,51 @@ export function poster(variant: string | undefined): BufFurniture {
       b.line(ix + 1, iy + 1, ix + 8, iy + 12, '#e05a5a');
       break;
     }
+    // --- clínica veterinária
+    case 'paw': {
+      b.rect(ix, iy, iw, ih, '#bfe3dc');
+      const c = '#2f6f66';
+      b.rect(ix + 3, iy + 6, 4, 4, c);
+      b.rect(ix + 2, iy + 7, 6, 2, c);
+      for (const [px, py] of [[0, 4], [2, 1], [6, 1], [8, 4]] as const) b.rect(ix + px, iy + py, 2, 2, c);
+      b.rect(ix, iy + ih - 2, iw, 2, '#2f9e8f');
+      break;
+    }
+    case 'dog': {
+      b.rect(ix, iy, iw, ih, '#f6dcc0');
+      const fur = '#b07a4a';
+      const ear = '#6b4630';
+      b.rect(ix + 2, iy + 4, 6, 5, fur);
+      b.rect(ix + 1, iy + 4, 1, 4, ear);
+      b.rect(ix + 8, iy + 4, 1, 4, ear);
+      b.set(ix + 3, iy + 6, '#2b2236');
+      b.set(ix + 6, iy + 6, '#2b2236');
+      b.rect(ix + 4, iy + 7, 2, 2, '#e8c79e');
+      b.set(ix + 4, iy + 7, '#2b2236');
+      b.set(ix + 5, iy + 7, '#2b2236');
+      b.set(ix + 5, iy + 9, '#e47aa8');
+      b.rect(ix, iy + ih - 2, iw, 2, '#e2604f');
+      break;
+    }
+    case 'vet_cross': {
+      b.rect(ix, iy, iw, ih, '#f4f6f7');
+      const g = '#2f9e8f';
+      b.rect(ix + 3, iy + 2, 4, 9, g);
+      b.rect(ix + 1, iy + 4, 8, 4, g);
+      b.rect(ix + 4, iy + 6, 2, 2, '#ffffff');
+      for (const [px, py] of [[3, 5], [4, 4], [5, 4], [6, 5]] as const) b.set(ix + px, iy + py, '#ffffff');
+      b.hline(ix + 1, ix + iw - 2, iy + ih - 2, g);
+      break;
+    }
+    case 'bone': {
+      b.rect(ix, iy, iw, ih, '#e4dbf2');
+      const bone = '#f6f1e4';
+      b.rect(ix + 2, iy + 6, 6, 2, bone);
+      for (const [px, py] of [[0, 5], [0, 7], [8, 5], [8, 7]] as const) b.rect(ix + px, iy + py, 2, 2, bone);
+      b.hline(ix + 2, ix + 7, iy + 8, '#d8cdb4');
+      b.rect(ix, iy + ih - 2, iw, 2, '#8d66cf');
+      break;
+    }
     case 'ship_it': {
       b.rect(ix, iy, iw, ih, '#bfe3f2');
       b.rect(ix, iy + 9, iw, 5, '#3f7fd8');

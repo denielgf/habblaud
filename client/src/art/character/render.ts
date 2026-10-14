@@ -906,6 +906,7 @@ function sleeveLength(a: Appearance): number {
   switch (a.topStyle) {
     case 'tshirt':
     case 'polo':
+    case 'scrubs':
       return 2;
     case 'blouse':
       return 3;
@@ -1105,6 +1106,26 @@ function drawTorso(dc: Dc): void {
       case 'tshirt':
         b.set(9 + lx, y + 2, ac.base);
         break;
+      case 'labcoat':
+        // Camisa aparecendo na gola, estetoscópio e a barra do jaleco por cima da calça.
+        b.set(9 + lx, y, ac.base);
+        b.set(9 + lx, y + 1, ac.dk);
+        b.set(10 + lx, y + 1, STETHO);
+        b.set(10 + lx, y + 2, STETHO);
+        b.set(10 + lx, y + 3, STETHO_METAL);
+        if (!r.seated) {
+          b.rect(8 + lx, y + 6, 7, 2, t.base);
+          b.set(8 + lx, y + 6, t.lt);
+          b.set(8 + lx, y + 7, t.lt);
+          b.set(14 + lx, y + 6, t.dk);
+          b.rect(8 + lx, y + 7, 7, 1, t.dk);
+        }
+        break;
+      case 'scrubs':
+        b.set(9 + lx, y, p.skin.base);
+        b.set(9 + lx, y + 1, t.dk);
+        b.set(10 + lx, y + 3, t.dk);
+        break;
     }
     drawLanyard(dc);
     return;
@@ -1202,9 +1223,60 @@ function drawTorso(dc: Dc): void {
         b.set(11, y + 2, ac.lt);
       } else b.rect(9, y, 6, 1, ac.base);
       break;
+    case 'labcoat':
+      if (front) {
+        // Gola aberta com a camisa por baixo, lapelas, abotoamento, bolso com caneta e estetoscópio no pescoço.
+        b.rect(11, y, 2, 2, ac.base);
+        b.set(12, y + 1, ac.dk);
+        b.set(10, y, t.hi);
+        b.set(13, y, t.hi);
+        b.set(10, y + 1, t.lt);
+        b.vline(11, y + 2, y + 5, t.dk);
+        b.set(10, y + 1, STETHO);
+        b.set(10, y + 2, STETHO);
+        b.set(13, y + 1, STETHO);
+        b.set(13, y + 2, STETHO);
+        b.set(13, y + 3, STETHO_METAL);
+        b.rect(8, y + 4, 2, 1, t.dk);
+        b.set(14, y + 3, '#3f63a8');
+        b.rect(13, y + 4, 2, 1, t.dk);
+      } else {
+        b.rect(9, y, 6, 1, t.lt);
+        b.set(10, y, STETHO);
+        b.set(13, y, STETHO);
+      }
+      if (!r.seated) {
+        // Barra do jaleco (até o meio da coxa), com a abertura no meio.
+        b.rect(8, y + 6, 8, 2, t.base);
+        b.set(8, y + 6, t.lt);
+        b.set(8, y + 7, t.lt);
+        b.set(15, y + 6, t.dk);
+        b.rect(8, y + 7, 8, 1, t.dk);
+        b.vline(11, y + 6, y + 7, t.dd);
+      } else if (front) {
+        b.set(8, y + 6, t.base);
+        b.set(15, y + 6, t.dk);
+      }
+      break;
+    case 'scrubs':
+      if (front) {
+        // Decote em V e bolso no peito.
+        b.set(10, y, t.dk);
+        b.set(13, y, t.dk);
+        b.set(11, y, p.skin.base);
+        b.set(12, y, p.skin.dk);
+        b.set(11, y + 1, t.dk);
+        b.set(12, y + 1, t.dk);
+        b.rect(13, y + 2, 2, 1, t.dk);
+        b.set(9, y + 3, t.lt);
+      } else b.rect(10, y, 4, 1, t.dk);
+      break;
   }
   drawLanyard(dc);
 }
+
+const STETHO = '#4b5560';
+const STETHO_METAL = '#c3cbd3';
 
 function drawLanyard(dc: Dc): void {
   const col = dc.a.lanyard;

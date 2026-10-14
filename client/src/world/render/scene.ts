@@ -149,14 +149,16 @@ const WALL_ART_TOP = 28;
 
 /**
  * Arte gerada por IA para um quadro/pôster: só do tamanho do lugar (quadros de 2 tiles nunca
- * recebem as pinturas largas); pôsteres preferem a mesma variante do procedural. Puro.
+ * recebem as pinturas largas); pôsteres só usam a arte da mesma variante do procedural. Puro.
  */
 export function pickWallArt(assets: WorldAssets | null, kind: 'painting' | 'poster', tiles: number, variant: string | undefined, seed: number): WallArtAsset | null {
   if (!assets) return null;
   let pool = assets.wallArt.filter((a) => a.kind === kind && a.tiles === tiles);
   if (kind === 'poster' && variant) {
+    // Variante sem arte pronta (ex.: os pôsteres da clínica) fica com o desenho procedural.
     const same = pool.filter((a) => a.variant === variant);
-    if (same.length) pool = same;
+    if (!same.length) return null;
+    pool = same;
   }
   if (!pool.length) return null;
   return pool[(seed >>> 0) % pool.length];
