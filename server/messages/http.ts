@@ -82,6 +82,6 @@ export function createMessageRoutes(registry: MessageRegistry): (req: IncomingMe
     }
     const msg = registry.get(id);
     if (msg) sendJson(res, 200, msg);
-    else sendJson(res, 404, { error: tr('mensagem desconhecida: ela já foi resolvida há mais de 10 min ou o PataLab reiniciou') });
+    else sendJson(res, 404, { error: tr('mensagem desconhecida: ela já foi resolvida há mais de 10 min ou o CorteLab reiniciou') });
   };
 }

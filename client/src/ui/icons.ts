@@ -326,19 +326,19 @@ export const FALLBACK_MARK = pixelIcon(
 );
 
 /**
- * Logotipo "PataLab" em pixels, com a mesma fonte bitmap da placa da marca (assets/brand/signage.png, gerada por
+ * Logotipo "CorteLab" em pixels, com a mesma fonte bitmap da placa da marca (assets/brand/signage.png, gerada por
  * scripts/assets/pixelart.py): a Pixelify Sans não fica nítida nesse tamanho.
- * c = "Pata" (creme), t = "Lab" (âmbar), s = sombra de 1 px.
+ * c = "Corte" (creme), t = "Lab" (âmbar), s = sombra de 1 px.
  */
 export const WORDMARK_ROWS = [
-  'cccc.........c.........t...........t....',
-  'csssc........c.........t...........t....',
-  'c...c..ccc..ccc...ccc..t......ttt..tttt.',
-  'ccccs..sssc.scs...sssc.t......ssst.tssst',
-  'csss...cccc..c....cccc.t......tttt.t...t',
-  'c.....csssc..c...csssc.t.....tssst.t...t',
-  'c.....scccc..scc.scccc.ttttt.stttt.tttts',
-  's......ssss...ss..ssss.sssss..ssss.ssss.',
+  '.ccc..............c.........t...........t....',
+  'csssc.............c.........t...........t....',
+  'c...s..ccc..c.cc.ccc...ccc..t......ttt..tttt.',
+  'c.....csssc.ccss.scs..csssc.t......ssst.tssst',
+  'c.....c...c.cs....c...ccccc.t......tttt.t...t',
+  'c...c.c...c.c.....c...cssss.t.....tssst.t...t',
+  'scccs.scccs.c.....scc.sccc..ttttt.stttt.tttts',
+  '.sss...sss..s......ss..sss..sssss..ssss.ssss.',
 ] as const;
 
 export const WORDMARK = pixelIcon(WORDMARK_ROWS, { s: 'rgba(6, 8, 14, 0.62)', c: '#f4f1ea', t: '#fac665' }, 'ui-wordmark');

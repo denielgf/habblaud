@@ -525,7 +525,7 @@ export class CodexSource implements AgentSource, CodexLive {
         return;
       }
       if (!path && !t.tail && t.acc.index.isCompressedOnly(t.threadId)) {
-        log.warnOnce('codex-zst', tr('Codex: há conversas compactadas (.jsonl.zst) que o PataLab ainda não lê; elas ficam sem detalhes.'));
+        log.warnOnce('codex-zst', tr('Codex: há conversas compactadas (.jsonl.zst) que o CorteLab ainda não lê; elas ficam sem detalhes.'));
       }
     }
     if (!t.tail) return;

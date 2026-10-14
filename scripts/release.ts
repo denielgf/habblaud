@@ -110,7 +110,7 @@ function main(argv: string[]): void {
   if (tagExists) fail(`a tag ${tag} já existe: suba a versão no package.json antes.`);
   const notes = unwrapMarkdown(section);
 
-  console.log(`PataLab ${tag}\n\n${notes}\n`);
+  console.log(`CorteLab ${tag}\n\n${notes}\n`);
   if (args.dryRun) {
     console.log('(--dry-run: nada foi publicado)');
     return;
@@ -120,9 +120,9 @@ function main(argv: string[]): void {
   try {
     const file = join(dir, 'notas.md');
     writeFileSync(file, `${notes}\n`);
-    run('git', ['tag', '-a', tag, '-m', `PataLab ${tag}`]);
+    run('git', ['tag', '-a', tag, '-m', `CorteLab ${tag}`]);
     run('git', ['push', 'origin', tag]);
-    const url = run('gh', ['release', 'create', tag, '--verify-tag', '--title', `PataLab ${tag}`, '--notes-file', file]);
+    const url = run('gh', ['release', 'create', tag, '--verify-tag', '--title', `CorteLab ${tag}`, '--notes-file', file]);
     console.log(`✓ Release publicada: ${url}`);
   } finally {
     rmSync(dir, { recursive: true, force: true });

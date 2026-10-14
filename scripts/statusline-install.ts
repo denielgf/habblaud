@@ -136,7 +136,7 @@ export function planInstall(settings: Settings, nodeCmd: string, tapPath: string
     if (!cur) return { action: 'skip', message: tr('o comando já menciona o tap, mas não no formato esperado; confira à mão') };
     const next = wrapCommand(nodeCmd, tapPath, cur.original);
     if (next === sl.command) return { action: 'none', message: tr('já instalado') };
-    return { action: 'install', settings: { ...settings, statusLine: { ...sl, command: next } }, message: tr('atualizado (novo caminho do PataLab ou do node)') };
+    return { action: 'install', settings: { ...settings, statusLine: { ...sl, command: next } }, message: tr('atualizado (novo caminho do CorteLab ou do node)') };
   }
   return {
     action: 'install',
@@ -154,7 +154,7 @@ export function planUninstall(settings: Settings): PlanAction {
   if (!cur.original) {
     const rest = { ...settings };
     delete rest.statusLine;
-    return { action: 'uninstall', settings: rest, message: tr('statusline criado pelo PataLab removido') };
+    return { action: 'uninstall', settings: rest, message: tr('statusline criado pelo CorteLab removido') };
   }
   return { action: 'uninstall', settings: { ...settings, statusLine: { ...sl, command: cur.original } }, message: `restaurado: ${cur.original}` };
 }
@@ -406,7 +406,7 @@ export function run(opts: RunOptions, ctx: RunContext): number {
   }
   if (opts.command === 'install' && changed) {
     out('');
-    out(tr('Pronto. Os números aparecem no PataLab depois da próxima resposta de cada sessão. Sessões já'));
+    out(tr('Pronto. Os números aparecem no CorteLab depois da próxima resposta de cada sessão. Sessões já'));
     out(tr('abertas costumam recarregar o settings.json sozinhas; se o uso não aparecer, reabra a sessão.'));
     out(tr('Uso capturado em {0}. Para desfazer: npm run usage:uninstall', [tildify(usageDirOf(env, home), home)]));
   }

@@ -292,7 +292,7 @@ export class OfficeStore {
         body: JSON.stringify(body),
       });
     } catch {
-      return tr('Sem conexão com o PataLab.');
+      return tr('Sem conexão com o CorteLab.');
     }
     if (res.ok) return undefined;
     try {
