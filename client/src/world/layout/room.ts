@@ -24,8 +24,8 @@ export interface RoomInput {
 
 const PLANTS_TALL = ['palm', 'ficus', 'monstera', 'bonsai'] as const;
 const PLANTS_SMALL = ['fern', 'succulent', 'flower'] as const;
-// Clínica veterinária: pôsteres de pata, cachorro, cruz vet e osso (mais o gato e o café do original).
-const POSTERS = ['paw', 'dog', 'vet_cross', 'bone', 'cat', 'coffee'] as const;
+// Agência de marketing: pôsteres de play, curtida, hashtag, megafone, gráfico e câmera (mais o café do original).
+const POSTERS = ['play', 'like', 'hashtag', 'megaphone', 'chart_up', 'camera', 'coffee'] as const;
 const BEANBAGS = ['red', 'blue', 'yellow', 'green'] as const;
 const CATS = ['orange', 'gray', 'black', 'white'] as const;
 const DOGS = ['caramel', 'black', 'golden', 'spotted'] as const;
@@ -33,7 +33,7 @@ const DOGS = ['caramel', 'black', 'golden', 'spotted'] as const;
 /** Canto de reunião (assentos extras para subagentes). */
 export type MeetingStyle = 'table' | 'round' | 'lounge';
 /** Canto da parte de baixo da sala (linhas 9–10). */
-export type CornerStyle = 'rest' | 'print' | 'green' | 'standdesk' | 'stands' | 'exam' | 'kennels';
+export type CornerStyle = 'rest' | 'print' | 'green' | 'standdesk' | 'stands' | 'exam' | 'kennels' | 'studio';
 
 /** Variações sorteadas pela semente (exportado para testes). */
 export interface RoomVariant {
@@ -61,9 +61,9 @@ export function roomVariant(seed: number): RoomVariant {
   const mirror = rng() < 0.5;
   const m = rng();
   const meeting: MeetingStyle = m < 0.45 ? 'table' : m < 0.78 ? 'round' : 'lounge';
-  // Clínica: a maioria das salas ganha um canto de atendimento (mesa de procedimento) e um de internação.
-  const lefts: CornerStyle[] = ['exam', 'exam', 'rest'];
-  const rights: CornerStyle[] = ['kennels', 'kennels', 'stands', 'standdesk'];
+  // Agência: a maioria das salas ganha um estúdio de gravação (fundo, ring light e câmera).
+  const lefts: CornerStyle[] = ['studio', 'studio', 'rest'];
+  const rights: CornerStyle[] = ['standdesk', 'stands', 'print'];
   const left = lefts[Math.floor(rng() * lefts.length) % lefts.length];
   let right = rights[Math.floor(rng() * rights.length) % rights.length];
   if (right === left) right = 'stands';
@@ -128,8 +128,8 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
   area.signId = wallItem('sign', signCx, undefined, { order: 0.95 });
   if (north) {
     wallItem('whiteboard', 4.5, undefined, { order: 0.6 });
-    wallItem(room.seed & 1 ? 'xray_viewer' : 'clock', 10, undefined, { order: 0.7 });
-    wallItem('poster', 11.1, pick(POSTERS), { order: 0.5 });
+    wallItem(room.seed & 1 ? 'analytics_screen' : 'clock', 10, undefined, { order: 0.7 });
+    wallItem(v.left === 'studio' ? 'onair_sign' : 'poster', 11.1, pick(POSTERS), { order: 0.5 });
     wallItem('window', 12.75, undefined, { order: 0.4 });
     // interruptor ao lado da porta, na mureta (por dentro)
     wallItem('light_switch', DOOR_X - 0.5, 'on', { ly: 12, on: 'south', order: 0.8 });
@@ -137,8 +137,8 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
   } else {
     wallItem('whiteboard', 2.5, undefined, { order: 0.6 });
     wallItem('light_switch', DOOR_X - 0.5, 'on', { order: 0.8 });
-    wallItem(room.seed & 1 ? 'xray_viewer' : 'clock', 12.3, undefined, { order: 0.7 });
-    wallItem('poster', 13.35, pick(POSTERS), { order: 0.5 });
+    wallItem(room.seed & 1 ? 'analytics_screen' : 'clock', 12.3, undefined, { order: 0.7 });
+    wallItem(v.left === 'studio' ? 'onair_sign' : 'poster', 13.35, pick(POSTERS), { order: 0.5 });
     spot('switch', DOOR_X - 1, 2, 'up', { dy: -3 });
   }
   spot('whiteboard', north ? 4 : 2, 2, 'up', { dx: 8, dy: 2 });
@@ -194,7 +194,7 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
   const column = Math.floor(rng() * 3);
   if (column === 0) {
     furn('binder_shelf', 14, 4, undefined, { order: 0.3 });
-    furn('med_cabinet', 14, 6, undefined, { order: 0.32 });
+    furn('printer', 14, 6, undefined, { order: 0.32 });
     furn('floor_lamp', 14, 8, undefined, { order: 0.34 });
   } else if (column === 1) {
     furn('binder_shelf', 14, 4, undefined, { order: 0.3 });
@@ -248,6 +248,17 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
         spot('stand', x0 + 2, 9, 'down', { dy: -1 });
         furn('pet_bed', x0 + 4, 10, CATS[(room.seed >> 2) % CATS.length], { order: o + 0.01 });
         furn('trash_bin', x0, 10, undefined, { order: o + 0.02 });
+        return;
+      }
+      case 'studio': {
+        // estúdio de gravação: quem grava fica no set (tapete colorido), de frente para a câmera e o ring
+        // light, que ficam à frente dele (mais perto da câmera do jogo) para não cobrir o personagem
+        rug(x0 + 1.25, 8.6, 3.5, 1.6, shade(theme.accent, 0.55), room.seed + 4);
+        furn('plant_tall', x0, 10, pick(PLANTS_TALL), { order: o });
+        furn('ring_light', x0 + 1, 10, undefined, { order: o + 0.01 });
+        furn('camera_tripod', x0 + 3, 10, undefined, { order: o + 0.02 });
+        furn('trash_bin', x0 + 4, 10, undefined, { order: o + 0.03 });
+        spot('stand', x0 + 2, 9, 'down', { dy: -1 });
         return;
       }
       case 'exam': {

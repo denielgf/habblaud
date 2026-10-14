@@ -39,8 +39,9 @@ export function layoutReception(): AreaLayout {
     b.spot('elevator', lx, 2, 'up', { x: b.px(cx), y: b.py(2) + 2, group: `elevator:${i}` });
   });
   b.wall('sign', 11, undefined, { order: 0.9 });
-  b.wall('clock', 8.15, undefined, { order: 0.7 });
-  b.wall('painting', 14.25, undefined, { order: 0.6 });
+  // Agência: parede de TVs (métricas e feed de vídeos) no lugar do relógio e do quadro
+  b.wall('tv', 8.5, undefined, { order: 0.7 });
+  b.wall('tv', 14.25, undefined, { order: 0.6 });
 
   b.furn('plant_tall', 1, 2, 'monstera', { order: 0.2 });
   b.furn('plant_tall', 14, 4, 'ficus', { order: 0.21 });
@@ -227,9 +228,10 @@ export function layoutLounge(): AreaLayout {
     b.furn('arcade', lx, 2, undefined, { order: 0.3 });
     b.spot('arcade', lx, 3, 'up', { dy: -3 });
   }
-  b.furn('bookshelf', 10, 2, undefined, { order: 0.3 });
-  b.spot('shelf', 10, 3, 'up', { dx: 8, dy: -2 });
-  b.furn('binder_shelf', 12, 2, undefined, { order: 0.31 });
+  // Agência: estúdio de gravação encostado no vidro (fundo infinito com ON AIR, ring light ao lado)
+  b.furn('backdrop', 10, 2, undefined, { order: 0.3 });
+  b.furn('ring_light', 12, 2, undefined, { order: 0.31 });
+  b.spot('stand', 10, 3, 'down', { dx: 8, dy: -1 });
   // planta baixa sob o quadro (uma alta cobriria a pintura)
   b.furn('plant_small', 1, 2, 'fern', { order: 0.2 });
   b.furn('plant_tall', 6, 2, 'palm', { order: 0.21 });

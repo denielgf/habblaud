@@ -631,8 +631,12 @@ export class Renderer {
         const r = s.base.rects?.tv;
         // roda na TV do lounge: o programa escolhido (futebol, novela, desenho) ou o videogame
         const live = this.sim.social.tvScreen();
-        const mode = live ? live.mode : TV_MODES[Math.floor(now / 9000) % TV_MODES.length];
-        const seed = live ? live.seed : w.seed;
+        // Agência: as TVs da recepção mostram métricas e o feed de vídeos, alternando entre si
+        const lobby = vis.id === 'core:recepcao';
+        const mode: ScreenMode = lobby
+          ? (['metrics', 'feed'] as const)[(Math.floor(now / 12000) + (w.seed & 1)) % 2]
+          : live ? live.mode : TV_MODES[Math.floor(now / 9000) % TV_MODES.length];
+        const seed = live && !lobby ? live.seed : w.seed;
         if (r) this.safe(() => this.art.drawScreen(ctx, { x: o.x + r.x, y: o.y + rise + r.y, w: r.w, h: r.h }, mode, now, seed));
         return;
       }

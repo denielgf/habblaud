@@ -66,13 +66,15 @@ const HAIR_W: Record<'f' | 'm', Weights<HairStyle>> = {
 };
 
 const TOP_W: Record<'f' | 'm', Weights<TopStyle>> = {
-  m: { tshirt: 5, hoodie: 4, shirt_tie: 2, sweater: 3, jacket: 3, blouse: 0.5, polo: 4, labcoat: 40, scrubs: 38 },
-  f: { tshirt: 4, hoodie: 3, shirt_tie: 1, sweater: 3, jacket: 3, blouse: 5, polo: 2, labcoat: 40, scrubs: 38 },
+  // Agência: roupa casual de criativo (camiseta, moletom, jaqueta); jaleco e pijama ficam raros.
+  m: { tshirt: 22, hoodie: 20, shirt_tie: 3, sweater: 10, jacket: 15, blouse: 2, polo: 10, labcoat: 1, scrubs: 1 },
+  f: { tshirt: 18, hoodie: 16, shirt_tie: 2, sweater: 12, jacket: 13, blouse: 18, polo: 6, labcoat: 1, scrubs: 1 },
 };
 
 const ACC_W: Record<'f' | 'm', Weights<Accessory>> = {
-  m: { none: 40, glasses: 18, sunglasses: 4, headphones: 13, cap: 7, beanie: 6, earrings: 2, bow: 0.3 },
-  f: { none: 36, glasses: 16, sunglasses: 4, headphones: 11, cap: 4, beanie: 5, earrings: 13, bow: 7 },
+  // Agência: mais fone (edição de vídeo), óculos escuros, boné e gorro.
+  m: { none: 22, glasses: 14, sunglasses: 11, headphones: 24, cap: 12, beanie: 9, earrings: 4, bow: 0.3 },
+  f: { none: 20, glasses: 12, sunglasses: 10, headphones: 20, cap: 7, beanie: 7, earrings: 14, bow: 6 },
 };
 
 const FACIAL_W: Weights<FacialHair> = { none: 62, stubble: 12, beard: 13, mustache: 7, goatee: 6 };
@@ -112,7 +114,7 @@ export function appearanceFromSeed(seed: number, opts: { look?: 'f' | 'm'; sub?:
   const lookRoll = rnd();
   const look: 'f' | 'm' = opts.look ?? (lookRoll < 0.5 ? 'f' : 'm');
   const skin = pick(SKINS);
-  const fun = rnd() < 0.08;
+  const fun = rnd() < 0.22; // agência: mais cabelo colorido
   const hair = fun ? pick(HAIR_FUN) : weightedPair(HAIR_NATURAL);
   let hairStyle = weighted(HAIR_W[look]);
   const eyes = pick(EYES);

@@ -158,7 +158,7 @@ describe('vida social', () => {
     if (a.wins + a.losses > 0) {
       expect(w.coins('ana')).not.toBe(START_COINS.main);
       expect(sim.social.events.at(-1)?.text).toMatch(/jokenpô/);
-      expect(['Recepção', 'Copa', 'Lounge']).toContain(sim.social.events.at(-1)?.place);
+      expect(['Recepção', 'Café', 'Sala de Ideias']).toContain(sim.social.events.at(-1)?.place);
     }
     // a roda acabou: nenhum lugar fica preso a ela
     for (const s of sim.spots.all()) expect(sim.spots.ownerOf(s.id)?.startsWith('g:') ?? false).toBe(false);

@@ -159,7 +159,7 @@ export type FurnitureKind =
   | 'whiteboard' // 3 tiles de largura. Quadro kanban. rects.board = área onde o render desenha post-its.
   | 'window' // 2 tiles. Janela; rects.glass = vidro (o render desenha o céu antes da moldura).
   | 'clock' // 1 tile. Relógio; rects.face = mostrador (ponteiros desenhados pelo render).
-  | 'poster' // 1 tile. variants: 'code' | 'coffee' | 'rocket' | 'cat' | 'bug' | 'ship_it' | 'paw' | 'dog' | 'vet_cross' | 'bone'
+  | 'poster' // 1 tile. variants: 'code' | 'coffee' | 'rocket' | 'cat' | 'bug' | 'ship_it' | 'paw' | 'dog' | 'vet_cross' | 'bone' | 'play' | 'like' | 'hashtag' | 'megaphone' | 'chart_up' | 'camera'
   | 'painting' // 2 tiles. Quadro com moldura; rects.art = área da pintura (pode receber imagem gerada por IA).
   | 'tv' // 2 tiles. TV de parede; rects.tv = tela.
   | 'light_switch' // 1 tile (o sprite é pequeno). variants: 'on' | 'off'
@@ -198,7 +198,13 @@ export type FurnitureKind =
   | 'xray_viewer' // parede, 1 tile. Negatoscópio aceso com raio-x.
   | 'pet_bed' // 1x1 caminha redonda com gato dormindo. variants: 'orange' | 'gray' | 'black' | 'white'
   | 'dog_bed' // 1x1 cachorro deitado num tapetinho. variants: 'caramel' | 'black' | 'golden' | 'spotted'
-  | 'aquarium'; // 1x1 aquário sobre gabinete.
+  | 'aquarium' // 1x1 aquário sobre gabinete.
+  // --- agência de marketing
+  | 'ring_light' // 1x1 ring light em tripé com celular.
+  | 'camera_tripod' // 1x1 câmera no tripé.
+  | 'backdrop' // 2x1 fundo infinito de estúdio (rolo de papel).
+  | 'analytics_screen' // parede, 1 tile. Tela com gráfico de métricas.
+  | 'onair_sign'; // parede, 1 tile. Placa luminosa ON AIR.
 
 export interface FurnitureDef {
   mount: 'floor' | 'wall';
@@ -245,7 +251,7 @@ export const FURNITURE: Readonly<Record<FurnitureKind, FurnitureDef>> = {
   whiteboard: { mount: 'wall', footprint: { w: 3, h: 0 }, blocks: false },
   window: { mount: 'wall', footprint: { w: 2, h: 0 }, blocks: false },
   clock: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false },
-  poster: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false, variants: ['code', 'coffee', 'rocket', 'cat', 'bug', 'ship_it', 'paw', 'dog', 'vet_cross', 'bone'] },
+  poster: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false, variants: ['code', 'coffee', 'rocket', 'cat', 'bug', 'ship_it', 'paw', 'dog', 'vet_cross', 'bone', 'play', 'like', 'hashtag', 'megaphone', 'chart_up', 'camera'] },
   painting: { mount: 'wall', footprint: { w: 2, h: 0 }, blocks: false },
   tv: { mount: 'wall', footprint: { w: 2, h: 0 }, blocks: false },
   light_switch: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false, variants: ['on', 'off'] },
@@ -280,6 +286,11 @@ export const FURNITURE: Readonly<Record<FurnitureKind, FurnitureDef>> = {
   pet_bed: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true, variants: ['orange', 'gray', 'black', 'white'] },
   dog_bed: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true, variants: ['caramel', 'black', 'golden', 'spotted'] },
   aquarium: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
+  ring_light: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
+  camera_tripod: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
+  backdrop: { mount: 'floor', footprint: { w: 2, h: 1 }, blocks: true },
+  analytics_screen: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false },
+  onair_sign: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false },
 };
 
 export type FloorKind =
@@ -326,7 +337,10 @@ export type ScreenMode =
   | 'progress' // terminal escuro com uma barra de progresso/spinner andando (esperando um comando terminar)
   // --- vida social (aditivo; pensados para a TV do lounge e o fliperama, mas valem para qualquer tela)
   | 'show' // programa de TV animado; mapeamento FIXO pelo `seed`: seed % 3 === 0 futebol (campo, jogadores, bola; de tempos em tempos a bola entra no gol e a tela pisca "GOL"), 1 novela (dois rostos em close, corações), 2 desenho animado (cores vivas)
-  | 'game'; // videogame (dois jogadores); mapeamento FIXO pelo `seed`: seed % 2 === 0 corrida em tela dividida (dois carrinhos na pista), 1 luta (dois bonecos e barras de vida)
+  | 'game' // videogame (dois jogadores); mapeamento FIXO pelo `seed`: seed % 2 === 0 corrida em tela dividida (dois carrinhos na pista), 1 luta (dois bonecos e barras de vida)
+  // --- agência (aditivo)
+  | 'metrics' // painel de métricas com barras subindo
+  | 'feed'; // feed de vídeos curtos rolando
 
 export interface RoomTheme {
   carpet: string;

@@ -49,8 +49,8 @@ const OVERVIEW_TOTAL = 4;
 const CORE_NAMES: Record<string, string> = {
   'core:recepcao': tr('Recepção'),
   'core:banheiros': tr('Banheiros'),
-  'core:copa': tr('Copa'),
-  'core:lounge': tr('Lounge'),
+  'core:copa': tr('Café'),
+  'core:lounge': tr('Sala de Ideias'),
 };
 
 /** 'shell' = espera de shell: balão escuro de terminal com texto verde. 'say' = fala das rodas (papo, torcida, apostas). */

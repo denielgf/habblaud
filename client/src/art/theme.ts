@@ -2,19 +2,29 @@
 // recebem temas diferentes; a ordem da lista alterna famílias de cor de propósito.
 import type { RoomTheme } from './api';
 
-// Clínica veterinária: consultórios claros (piso de porcelanato frio, paredes verde-água, azul-hospital ou
-// pêssego) com acentos que lembram a sinalização de clínica (verde-água, laranja-pata, coral).
+// Agência de marketing: cada sala inspirada nas cores de uma rede social. Paredes e pisos ficam claros
+// (para os personagens continuarem legíveis); a identidade vem do rodapé, do tapete e do acento.
 const THEMES: readonly RoomTheme[] = [
-  { carpet: '#d5e4e1', carpet2: '#c8dbd7', wall: { base: '#eef7f5', trim: '#7fb8ad', pattern: 'tiles' }, accent: '#2f9e8f', deskVariant: 'white', chairVariant: 'green' },
-  { carpet: '#dfe3e8', carpet2: '#d3d8df', wall: { base: '#f4f6f8', trim: '#9fb3c8', pattern: 'plain' }, accent: '#f08a3c', deskVariant: 'white', chairVariant: 'gray' },
-  { carpet: '#d3dfea', carpet2: '#c6d5e3', wall: { base: '#eef4fa', trim: '#7fa3c8', pattern: 'tiles' }, accent: '#3f7fd8', deskVariant: 'white', chairVariant: 'blue' },
-  { carpet: '#e6dcd2', carpet2: '#dccfc3', wall: { base: '#fbf3ec', trim: '#d39b7a', pattern: 'stripes' }, accent: '#e2604f', deskVariant: 'wood', chairVariant: 'red' },
-  { carpet: '#cfe2d6', carpet2: '#c1d8c9', wall: { base: '#f0f7f1', trim: '#86b596', pattern: 'wood_panel' }, accent: '#4cae6a', deskVariant: 'wood', chairVariant: 'green' },
-  { carpet: '#dde2e2', carpet2: '#d0d6d6', wall: { base: '#f5f7f7', trim: '#8fa5a5', pattern: 'marble' }, accent: '#36b0b0', deskVariant: 'white', chairVariant: 'black' },
-  { carpet: '#e4dbe6', carpet2: '#d9cedc', wall: { base: '#f8f3f9', trim: '#b49cc0', pattern: 'plain' }, accent: '#8d66cf', deskVariant: 'white', chairVariant: 'gray' },
-  { carpet: '#e9e0cf', carpet2: '#dfd4c0', wall: { base: '#fbf6ec', trim: '#c9a86e', pattern: 'tiles' }, accent: '#e8a33a', deskVariant: 'wood', chairVariant: 'black' },
-  { carpet: '#cde3e6', carpet2: '#bfd9dd', wall: { base: '#edf7f8', trim: '#6fb0ba', pattern: 'stripes' }, accent: '#2a8fa0', deskVariant: 'white', chairVariant: 'blue' },
-  { carpet: '#e3d6d0', carpet2: '#d8c8c0', wall: { base: '#f9f1ed', trim: '#b98472', pattern: 'wood_panel' }, accent: '#c9713f', deskVariant: 'dark', chairVariant: 'gray' },
+  // Instagram: rosa e laranja
+  { carpet: '#f3d3dc', carpet2: '#ecc3cf', wall: { base: '#fdf1f4', trim: '#e1306c', pattern: 'stripes' }, accent: '#f77737', deskVariant: 'white', chairVariant: 'red' },
+  // TikTok: grafite com ciano e rosa
+  { carpet: '#c4c7ce', carpet2: '#b6bac3', wall: { base: '#e3e5ea', trim: '#25f4ee', pattern: 'brick' }, accent: '#fe2c55', deskVariant: 'dark', chairVariant: 'black' },
+  // YouTube: branco e vermelho
+  { carpet: '#e9dcdc', carpet2: '#e0cfcf', wall: { base: '#fbf6f6', trim: '#ff0000', pattern: 'plain' }, accent: '#cc0000', deskVariant: 'white', chairVariant: 'red' },
+  // LinkedIn: azul corporativo
+  { carpet: '#d2e0ee', carpet2: '#c3d5e8', wall: { base: '#f0f5fa', trim: '#0a66c2', pattern: 'wood_panel' }, accent: '#0a66c2', deskVariant: 'wood', chairVariant: 'blue' },
+  // WhatsApp: verde
+  { carpet: '#d3ead8', carpet2: '#c4e2cb', wall: { base: '#f0f8f2', trim: '#25d366', pattern: 'tiles' }, accent: '#128c7e', deskVariant: 'white', chairVariant: 'green' },
+  // Twitch: roxo
+  { carpet: '#ddd3f0', carpet2: '#d0c3ea', wall: { base: '#f5f1fc', trim: '#9146ff', pattern: 'stripes' }, accent: '#9146ff', deskVariant: 'dark', chairVariant: 'gray' },
+  // Snapchat: amarelo
+  { carpet: '#f3ebc4', carpet2: '#ece1ad', wall: { base: '#fffbe6', trim: '#e6c800', pattern: 'plain' }, accent: '#fffc00', deskVariant: 'wood', chairVariant: 'black' },
+  // X: preto e branco
+  { carpet: '#d6d7da', carpet2: '#cacbcf', wall: { base: '#f2f2f3', trim: '#14171a', pattern: 'brick' }, accent: '#1d9bf0', deskVariant: 'dark', chairVariant: 'black' },
+  // Kwai: laranja
+  { carpet: '#f3dcc8', carpet2: '#ecceb4', wall: { base: '#fdf4ec', trim: '#ff7e00', pattern: 'wood_panel' }, accent: '#ff5000', deskVariant: 'wood', chairVariant: 'gray' },
+  // Pinterest: vermelho escuro
+  { carpet: '#ecd6d8', carpet2: '#e4c6c9', wall: { base: '#fcf3f4', trim: '#bd081c', pattern: 'tiles' }, accent: '#e60023', deskVariant: 'white', chairVariant: 'red' },
 ];
 
 export const THEME_COUNT = THEMES.length;

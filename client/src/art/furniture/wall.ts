@@ -158,6 +158,76 @@ export function poster(variant: string | undefined): BufFurniture {
       b.line(ix + 1, iy + 1, ix + 8, iy + 12, '#e05a5a');
       break;
     }
+    // --- agência de marketing
+    case 'play': {
+      // botão de play de vídeo
+      b.rect(ix, iy, iw, ih, '#2b2440');
+      b.rect(ix + 1, iy + 3, 8, 6, '#e2447e');
+      b.rect(ix + 2, iy + 2, 6, 8, '#e2447e');
+      for (let i = 0; i < 3; i++) b.vline(ix + 4 + i, iy + 4 + i, iy + 7 - i, '#ffffff');
+      b.hline(ix + 1, ix + 8, iy + ih - 2, '#8d66cf');
+      break;
+    }
+    case 'like': {
+      // coração de curtida
+      b.rect(ix, iy, iw, ih, '#fde3ec');
+      const c = '#e2447e';
+      b.rect(ix + 2, iy + 4, 2, 2, c);
+      b.rect(ix + 6, iy + 4, 2, 2, c);
+      b.rect(ix + 1, iy + 5, 8, 2, c);
+      b.rect(ix + 2, iy + 7, 6, 1, c);
+      b.rect(ix + 3, iy + 8, 4, 1, c);
+      b.rect(ix + 4, iy + 9, 2, 1, c);
+      b.set(ix + 2, iy + 5, '#f7a9c4');
+      b.hline(ix + 2, ix + 7, iy + ih - 2, '#e2447e');
+      break;
+    }
+    case 'hashtag': {
+      b.rect(ix, iy, iw, ih, '#f2c14e');
+      const c = '#2b2440';
+      b.vline(ix + 3, iy + 3, iy + 10, c);
+      b.vline(ix + 6, iy + 3, iy + 10, c);
+      b.hline(ix + 1, ix + 8, iy + 5, c);
+      b.hline(ix + 1, ix + 8, iy + 8, c);
+      b.hline(ix + 1, ix + 8, iy + ih - 2, '#d9a42e');
+      break;
+    }
+    case 'megaphone': {
+      b.rect(ix, iy, iw, ih, '#d6f1f5');
+      const c = '#f08a3c';
+      b.rect(ix + 1, iy + 6, 2, 3, '#3a404d');
+      b.vline(ix + 3, iy + 5, iy + 9, c);
+      b.vline(ix + 4, iy + 4, iy + 10, c);
+      b.vline(ix + 5, iy + 3, iy + 11, c);
+      b.vline(ix + 6, iy + 3, iy + 11, '#d9732a');
+      b.set(ix + 8, iy + 4, '#2fb3c6');
+      b.set(ix + 8, iy + 7, '#2fb3c6');
+      b.set(ix + 8, iy + 10, '#2fb3c6');
+      b.hline(ix + 1, ix + 8, iy + ih - 2, '#2fb3c6');
+      break;
+    }
+    case 'chart_up': {
+      // gráfico subindo
+      b.rect(ix, iy, iw, ih, '#ffffff');
+      b.vline(ix + 1, iy + 2, iy + 11, '#8a96a3');
+      b.hline(ix + 1, ix + 8, iy + 11, '#8a96a3');
+      const pts = [[2, 9], [4, 7], [5, 8], [7, 4], [8, 2]] as const;
+      for (let i = 0; i < pts.length - 1; i++) b.line(ix + pts[i][0], iy + pts[i][1], ix + pts[i + 1][0], iy + pts[i + 1][1], '#4cae6a');
+      b.set(ix + 8, iy + 2, '#2e7d4f');
+      b.rect(ix + 3, iy + 10, 1, 1, '#4cae6a');
+      b.rect(ix + 6, iy + 9, 1, 2, '#4cae6a');
+      break;
+    }
+    case 'camera': {
+      b.rect(ix, iy, iw, ih, '#8d66cf');
+      b.rect(ix + 1, iy + 5, 8, 5, '#2b2440');
+      b.rect(ix + 3, iy + 4, 3, 1, '#2b2440');
+      b.rect(ix + 4, iy + 6, 3, 3, '#5bc0de');
+      b.set(ix + 4, iy + 6, '#ffffff');
+      b.set(ix + 8, iy + 6, '#e2447e');
+      b.hline(ix + 1, ix + 8, iy + ih - 2, '#f2c14e');
+      break;
+    }
     // --- clínica veterinária
     case 'paw': {
       b.rect(ix, iy, iw, ih, '#bfe3dc');

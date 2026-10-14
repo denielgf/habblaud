@@ -97,26 +97,61 @@ export function drawScreen(ctx: Ctx, r: Rect, mode: ScreenMode, t: number, seed:
       break;
     }
     case 'code': {
-      fill(ctx, x, y, w, h, '#1d2130');
-      fill(ctx, x, y, Math.min(2, w), h, '#252a3c');
-      const rows = Math.floor(h / 2);
-      const scroll = Math.floor(t / 420 + (s % 50));
-      for (let i = 0; i < rows; i++) {
-        const line = scroll + i;
-        const hh = h32(s, line);
-        const yy = y + i * 2 + 1;
-        if (yy >= y + h) break;
-        fill(ctx, x, yy, 1, 1, '#4a5170');
-        let cx = x + 3 + (hh % 4);
-        const tokens = 1 + ((hh >>> 3) % 3);
-        if ((hh >>> 7) % 7 === 0) continue; // linha em branco
-        for (let k = 0; k < tokens && cx < x + w - 1; k++) {
-          const tw = 1 + ((hh >>> (9 + k * 4)) % 4);
-          fill(ctx, cx, yy, Math.min(tw, x + w - 1 - cx), 1, SYNTAX[(hh >>> (5 + k * 3)) % SYNTAX.length]);
-          cx += tw + 1;
+      // Agência: em vez de código, a timeline de um editor de vídeo (prévia em cima, faixas de clipes
+      // embaixo andando para a esquerda e o cursor de reprodução em rosa).
+      fill(ctx, x, y, w, h, '#1b1f2b');
+      const ph = Math.max(1, Math.floor(h * 0.4));
+      fill(ctx, x + 1, y, Math.max(1, w - 2), ph, '#0f121a');
+      const scene = Math.floor(t / 1600 + (s % 7)) % 4;
+      fill(ctx, x + 2, y + Math.floor(ph / 2), Math.max(1, w - 4), Math.max(1, ph - Math.floor(ph / 2)), ['#e2447e', '#2fb3c6', '#f2c14e', '#8d66cf'][scene]);
+      const CLIPS = ['#5b8fe0', '#8d66cf', '#e2447e', '#2fb3c6'];
+      const shift = Math.floor(t / 300 + (s % 31));
+      for (let row = 0, yy = y + ph + 1; yy < y + h; row++, yy += 2) {
+        let cx = x - (shift % 6);
+        let k = 0;
+        while (cx < x + w) {
+          const hh = h32(s + row * 97, Math.floor((shift + k * 6) / 6) + k);
+          const cw = 2 + (hh % 5);
+          const col = row === 2 ? '#4cae6a' : CLIPS[(hh >>> 4) % CLIPS.length];
+          const x0 = Math.max(x, cx);
+          const x1 = Math.min(x + w, cx + cw);
+          if (x1 > x0) fill(ctx, x0, yy, x1 - x0, 1, col);
+          cx += cw + 1;
+          k++;
         }
-        if (i === rows - 1 && Math.floor(t / 500) % 2 === 0 && cx < x + w) fill(ctx, cx, yy, 1, 1, '#f8f8f2');
       }
+      fill(ctx, x + Math.floor(w * 0.4), y + ph, 1, h - ph, '#ff4d6d');
+      break;
+    }
+    case 'metrics': {
+      // Painel de métricas: barras subindo devagar e a última em destaque.
+      fill(ctx, x, y, w, h, '#151a28');
+      const n = Math.max(3, Math.floor((w - 2) / 2));
+      const grow = Math.floor(t / 2200 + (s % 5)) % n;
+      for (let i = 0; i < n; i++) {
+        const bh = Math.max(1, Math.round(((i + 1) / n) * (h - 3)) - (i === grow ? 1 : 0));
+        fill(ctx, x + 1 + i * 2, y + h - 1 - bh, 1, bh, i === n - 1 ? '#e2447e' : '#2fb3c6');
+      }
+      fill(ctx, x + 1, y + 1, Math.min(4, w - 2), 1, '#f4f1ea');
+      if (Math.floor(t / 600) % 2 === 0) fill(ctx, x + w - 2, y + 1, 1, 1, '#4cae6a');
+      break;
+    }
+    case 'feed': {
+      // Feed de vídeos curtos: cartões verticais rolando para cima, com um coração pulsando.
+      fill(ctx, x, y, w, h, '#0f0f14');
+      const cardW = Math.max(3, Math.floor(w / 3));
+      const cx = x + Math.floor((w - cardW) / 2);
+      const scroll = Math.floor(t / 180 + (s % 40));
+      const cardH = h + 2;
+      const off = scroll % cardH;
+      for (let k = -1; k < 2; k++) {
+        const top = y + k * cardH - off;
+        const col = ['#e2447e', '#2fb3c6', '#f2c14e', '#8d66cf', '#f77737'][(Math.floor(scroll / cardH) + k + 5) % 5];
+        const y0 = Math.max(y, top);
+        const y1 = Math.min(y + h, top + h);
+        if (y1 > y0) fill(ctx, cx, y0, cardW, y1 - y0, col);
+      }
+      if (Math.floor(t / 400) % 3 !== 0) fill(ctx, cx + cardW + 1, y + h - 3, 1, 1, '#ff4d6d');
       break;
     }
     case 'terminal': {

@@ -38,10 +38,10 @@ const HELD_PT: Record<HeldItem, string> = {
   none: 'nada', coffee: 'café', water: 'água', papers: 'papéis', laptop: 'notebook', book: 'livro', box: 'caixa', paddle: 'raquete', popcorn: 'pipoca',
   controller: 'controle', phone: 'celular', lipstick: 'batom', comb: 'pente', rock: 'pedra', paper: 'papel', scissors: 'tesoura',
 };
-const SCREENS: readonly ScreenMode[] = ['off', 'standby', 'idle', 'code', 'terminal', 'browser', 'search', 'chat', 'docs', 'tasks', 'alert', 'progress', 'show', 'game'];
+const SCREENS: readonly ScreenMode[] = ['off', 'standby', 'idle', 'code', 'terminal', 'browser', 'search', 'chat', 'docs', 'tasks', 'alert', 'progress', 'show', 'game', 'metrics', 'feed'];
 const SCREEN_PT: Record<ScreenMode, string> = {
-  off: 'desligado', standby: 'em espera', idle: 'descanso', code: 'código', terminal: 'terminal', browser: 'navegador', search: 'busca', chat: 'chat', docs: 'documento', tasks: 'tarefas', alert: 'alerta',
-  progress: 'progresso', show: 'programa', game: 'videogame',
+  off: 'desligado', standby: 'em espera', idle: 'descanso', code: 'timeline de vídeo', terminal: 'terminal', browser: 'navegador', search: 'busca', chat: 'chat', docs: 'documento', tasks: 'tarefas', alert: 'alerta',
+  progress: 'progresso', show: 'programa', game: 'videogame', metrics: 'métricas', feed: 'feed de vídeos',
 };
 const FLOORS: readonly FloorKind[] = ['carpet', 'wood', 'tile_check', 'tile_white', 'concrete', 'marble', 'grass', 'sidewalk', 'street'];
 const FLOOR_PT: Record<FloorKind, string> = {

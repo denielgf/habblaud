@@ -4,6 +4,7 @@ import { FURNITURE, type FurnitureKind } from '../api';
 import { trim, type BufFurniture } from '../core/sprite';
 import * as C from './common';
 import * as V from './clinic';
+import * as A from './agency';
 import * as O from './office';
 import * as W from './wall';
 
@@ -142,6 +143,16 @@ function build(kind: FurnitureKind, variant: string | undefined, state: number, 
       return V.dogBed(variant);
     case 'aquarium':
       return V.aquarium();
+    case 'ring_light':
+      return A.ringLight();
+    case 'camera_tripod':
+      return A.cameraTripod();
+    case 'backdrop':
+      return A.backdrop();
+    case 'analytics_screen':
+      return A.analyticsScreen();
+    case 'onair_sign':
+      return A.onAirSign();
   }
 }
 
