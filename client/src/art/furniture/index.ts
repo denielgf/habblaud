@@ -3,6 +3,7 @@
 import { FURNITURE, type FurnitureKind } from '../api';
 import { trim, type BufFurniture } from '../core/sprite';
 import * as C from './common';
+import * as V from './clinic';
 import * as O from './office';
 import * as W from './wall';
 
@@ -125,6 +126,16 @@ function build(kind: FurnitureKind, variant: string | undefined, state: number, 
       return C.receptionDesk(seed);
     case 'bench':
       return C.bench();
+    case 'exam_table':
+      return V.examTable();
+    case 'med_cabinet':
+      return V.medCabinet();
+    case 'pet_scale':
+      return V.petScale();
+    case 'kennel':
+      return V.kennel();
+    case 'xray_viewer':
+      return V.xrayViewer();
   }
 }
 

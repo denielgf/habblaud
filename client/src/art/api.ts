@@ -189,7 +189,13 @@ export type FurnitureKind =
   | 'sink' // 1x1 pia com gabinete (encostada na parede norte; use 'mirror' na parede acima).
   // --- recepção
   | 'reception_desk' // 3x1 balcão de recepção.
-  | 'bench'; // 2x1 banco de espera (assento, olhando para baixo).
+  | 'bench' // 2x1 banco de espera (assento, olhando para baixo).
+  // --- clínica veterinária
+  | 'exam_table' // 2x1 mesa de procedimento em inox (coluna hidráulica, toalha).
+  | 'med_cabinet' // 1x1 armário alto de medicamentos (vitrine em cima, portas com cruz verde).
+  | 'pet_scale' // 1x1 balança de chão com visor digital.
+  | 'kennel' // 1x1 duas gaiolas de internação empilhadas.
+  | 'xray_viewer'; // parede, 1 tile. Negatoscópio aceso com raio-x.
 
 export interface FurnitureDef {
   mount: 'floor' | 'wall';
@@ -263,6 +269,11 @@ export const FURNITURE: Readonly<Record<FurnitureKind, FurnitureDef>> = {
   sink: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
   reception_desk: { mount: 'floor', footprint: { w: 3, h: 1 }, blocks: true },
   bench: { mount: 'floor', footprint: { w: 2, h: 1 }, blocks: false, seat: true },
+  exam_table: { mount: 'floor', footprint: { w: 2, h: 1 }, blocks: true },
+  med_cabinet: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
+  pet_scale: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
+  kennel: { mount: 'floor', footprint: { w: 1, h: 1 }, blocks: true },
+  xray_viewer: { mount: 'wall', footprint: { w: 1, h: 0 }, blocks: false },
 };
 
 export type FloorKind =
