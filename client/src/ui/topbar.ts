@@ -143,7 +143,14 @@ export class TopBar implements UiComponent {
       ),
       counterWrap,
       this.usage.el,
-      h('div', { class: 'ui-topbar__right' }, viewGroup, panelGroup),
+      h(
+        'div',
+        { class: 'ui-topbar__right' },
+        // Aba Gestão da CorteLab (aprovar, corrigir legenda, esteira): página servida em /gestao.
+        h('a', { class: 'ui-counter', text: '🎬 Gestão', title: 'Aprovar cortes, corrigir legendas e ver a esteira', attrs: { href: '/gestao', target: '_blank', rel: 'noopener', style: 'text-decoration:none' } }),
+        viewGroup,
+        panelGroup,
+      ),
     );
   }
 

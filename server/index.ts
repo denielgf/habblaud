@@ -8,6 +8,7 @@ import { codexDirsRefused, isDefaultDir } from './accounts/detect';
 import { AccountsService } from './accounts/service';
 import { isTruthy, loadConfig, messagesOffReason, terminalOffReason } from './config';
 import { createApiHandler, sendJson } from './http/app';
+import { createGestaoHandler } from './gestao';
 import { createRequestGuard, isLoopbackHost } from './http/guard';
 import { createRemoteGate, isRemoteRequest, loadSecret, RemoteSessions, startRemoteListener, type RemoteListener } from './http/remote';
 import { Hub } from './http/sse';
@@ -316,6 +317,9 @@ const api = createApiHandler({
   remote: config.remote ? { is: isRemoteRequest, allows: (f) => config.remote!.allow.has(f) } : undefined,
 });
 
+// Aba Gestão da CorteLab (só com CORTELAB_DIR): rotas /gestao e /api/gestao/*.
+const gestao = createGestaoHandler(process.env.CORTELAB_DIR);
+
 const server = http.createServer();
 let closeVite: (() => Promise<void>) | undefined;
 
@@ -351,6 +355,7 @@ server.on('request', (req, res) => {
   const url = parseUrl(req);
   try {
     if (guard(req, res)) return;
+    if (gestao?.(req, res, url)) return;
     if (!api(req, res, url)) fallback(req, res, url);
   } catch (err) {
     log.warn(tr('Erro ao responder {0} {1}: {2}', [req.method, url.pathname, errMsg(err)]));
@@ -385,6 +390,7 @@ if (config.remote) {
       try {
         if (guard(req, res)) return;
         if (gate(req, res, url)) return;
+        if (gestao?.(req, res, url)) return;
         if (!api(req, res, url)) fallback(req, res, url);
       } catch (err) {
         log.warn(tr('Erro ao responder (remoto) {0} {1}: {2}', [req.method, url.pathname, errMsg(err)]));
