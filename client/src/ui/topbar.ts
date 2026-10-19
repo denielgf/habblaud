@@ -11,6 +11,7 @@ import { focusPermission, nextPermissionAgent, permissionAgents } from './permis
 import { UsageCards } from './usage';
 import { VersionChip } from './version';
 import { wordmark } from './widgets';
+import { safeLocalStorage } from './prefs';
 import { tr } from '../../../shared/i18n';
 
 interface CounterRefs {
@@ -28,6 +29,27 @@ const COUNTERS: { key: Exclude<keyof Counters, 'shells'>; singular: string; plur
   { key: 'waiting', singular: tr('precisa de você'), plural: tr('precisam de você'), hint: tr('Agentes esperando sua resposta no terminal') },
 ];
 const WAITING_HINT = COUNTERS.find((c) => c.key === 'waiting')!.hint;
+
+/** Botão "Pixel / 3D": grava a escolha (habblaud.visual) e recarrega a página com o outro mundo. */
+function visualToggle(): HTMLElement {
+  const is3d = safeLocalStorage()?.getItem('habblaud.visual') === '3d';
+  return h('button', {
+    class: 'ui-counter',
+    type: 'button',
+    text: is3d ? '🧊 3D' : '👾 Pixel',
+    title: is3d ? 'Visual 3D. Clique para voltar ao pixel art.' : 'Visual pixel art. Clique para ver em 3D.',
+    on: {
+      click: () => {
+        try {
+          safeLocalStorage()?.setItem('habblaud.visual', is3d ? 'pixel' : '3d');
+        } catch {
+          /* sem armazenamento: fica como está */
+        }
+        location.reload();
+      },
+    },
+  });
+}
 
 export class TopBar implements UiComponent {
   readonly el: HTMLElement;
@@ -148,6 +170,8 @@ export class TopBar implements UiComponent {
         { class: 'ui-topbar__right' },
         // Aba Gestão da CorteLab (aprovar, corrigir legenda, esteira): página servida em /gestao.
         h('a', { class: 'ui-counter', text: '🎬 Gestão', title: 'Aprovar cortes, corrigir legendas e ver a esteira', attrs: { href: '/gestao', target: '_blank', rel: 'noopener', style: 'text-decoration:none' } }),
+        // Seletor de visual: pixel art ou 3D (a escolha fica no navegador e a página recarrega).
+        visualToggle(),
         viewGroup,
         panelGroup,
       ),

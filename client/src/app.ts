@@ -7,7 +7,7 @@ import { createUI } from './ui';
 import { migrateLegacyKeys, safeLocalStorage } from './ui/prefs';
 import { getLocale, tr } from '../../shared/i18n';
 
-export function start(): void {
+export async function start(): Promise<void> {
   // Antes de tudo: o mundo (carteiras) e a UI (preferências) leem o localStorage ao serem criados.
   migrateLegacyKeys(safeLocalStorage());
 
@@ -20,7 +20,12 @@ export function start(): void {
 
   const params = new URLSearchParams(location.search);
   const store = new OfficeStore({ mock: params.has('mock') });
-  const world = createWorld(document.getElementById('world') as HTMLCanvasElement, store);
+  const canvas = document.getElementById('world') as HTMLCanvasElement;
+  // Visual escolhido no botão da barra superior: pixel art (padrão) ou 3D (Three.js, carregado só quando usado).
+  const world =
+    safeLocalStorage()?.getItem('habblaud.visual') === '3d'
+      ? (await import('./world3d')).createWorld3D(canvas, store)
+      : createWorld(canvas, store);
   createUI(document.getElementById('ui') as HTMLElement, store, world);
   // O que esta página pode fazer (porta local ou remota com login) chega antes do primeiro snapshot (ou desiste em
   // poucos segundos e fica a regra de antes).
