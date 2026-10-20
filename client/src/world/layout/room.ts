@@ -129,16 +129,20 @@ export function layoutProjectRoom(room: RoomInput, theme: RoomTheme): AreaLayout
   if (north) {
     wallItem('whiteboard', 4.5, undefined, { order: 0.6 });
     wallItem(room.seed & 1 ? 'analytics_screen' : 'clock', 10, undefined, { order: 0.7 });
-    wallItem(v.left === 'studio' ? 'onair_sign' : 'poster', 11.1, pick(POSTERS), { order: 0.5 });
-    wallItem('window', 12.75, undefined, { order: 0.4 });
+    // Estúdio: o ON AIR fica no lugar da janela e o pôster continua no seu lugar (para a arte própria da sala).
+    wallItem('poster', 11.1, pick(POSTERS), { order: 0.5 });
+    if (v.left === 'studio') wallItem('onair_sign', 12.75, undefined, { order: 0.4 });
+    else wallItem('window', 12.75, undefined, { order: 0.4 });
     // interruptor ao lado da porta, na mureta (por dentro)
     wallItem('light_switch', DOOR_X - 0.5, 'on', { ly: 12, on: 'south', order: 0.8 });
     spot('switch', DOOR_X - 1, 10, 'down', { dy: -1 });
   } else {
     wallItem('whiteboard', 2.5, undefined, { order: 0.6 });
     wallItem('light_switch', DOOR_X - 0.5, 'on', { order: 0.8 });
-    wallItem(room.seed & 1 ? 'analytics_screen' : 'clock', 12.3, undefined, { order: 0.7 });
-    wallItem(v.left === 'studio' ? 'onair_sign' : 'poster', 13.35, pick(POSTERS), { order: 0.5 });
+    // Estúdio: o ON AIR fica no lugar do relógio/tela e o pôster continua no seu lugar.
+    if (v.left === 'studio') wallItem('onair_sign', 12.3, undefined, { order: 0.7 });
+    else wallItem(room.seed & 1 ? 'analytics_screen' : 'clock', 12.3, undefined, { order: 0.7 });
+    wallItem('poster', 13.35, pick(POSTERS), { order: 0.5 });
     spot('switch', DOOR_X - 1, 2, 'up', { dy: -3 });
   }
   spot('whiteboard', north ? 4 : 2, 2, 'up', { dx: 8, dy: 2 });

@@ -14,6 +14,8 @@ export interface WallArtAsset {
   variant?: string;
   /** Versão com moldura pronta (desenhada no lugar do quadro procedural, em tamanho nativo). */
   framed?: BrandAsset;
+  /** (Opcional) Só para estas salas, pelo nome exibido (ex.: os quadros dos setores da CorteLab). */
+  rooms?: string[];
 }
 
 export interface BrandAsset {
@@ -35,7 +37,7 @@ interface ManifestFile {
 }
 
 interface Manifest {
-  wallArt?: (ManifestFile & { id: string; kind: string; tiles?: number; variant?: string; framed?: ManifestFile })[];
+  wallArt?: (ManifestFile & { id: string; kind: string; tiles?: number; variant?: string; framed?: ManifestFile; rooms?: unknown })[];
   brand?: { signage?: ManifestFile; mark?: ManifestFile };
 }
 
@@ -81,6 +83,7 @@ export async function loadWorldAssets(signal?: AbortSignal): Promise<WorldAssets
         tiles,
         variant: typeof a.variant === 'string' ? a.variant : undefined,
         framed: f ? { img: f, w: f.naturalWidth, h: f.naturalHeight } : undefined,
+        rooms: Array.isArray(a.rooms) ? a.rooms.filter((r): r is string => typeof r === 'string') : undefined,
       });
     });
     const brand = async (f: ManifestFile | undefined): Promise<BrandAsset | undefined> => {

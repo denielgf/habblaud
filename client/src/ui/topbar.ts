@@ -11,6 +11,7 @@ import { focusPermission, nextPermissionAgent, permissionAgents } from './permis
 import { UsageCards } from './usage';
 import { VersionChip } from './version';
 import { wordmark } from './widgets';
+import { filaDoDaniel, onFila } from './cortelab';
 import { tr } from '../../../shared/i18n';
 
 interface CounterRefs {
@@ -28,6 +29,17 @@ const COUNTERS: { key: Exclude<keyof Counters, 'shells'>; singular: string; plur
   { key: 'waiting', singular: tr('precisa de você'), plural: tr('precisam de você'), hint: tr('Agentes esperando sua resposta no terminal') },
 ];
 const WAITING_HINT = COUNTERS.find((c) => c.key === 'waiting')!.hint;
+
+/** Botão da aba Gestão: mostra quantos cortes esperam o Daniel (aprovar ou conferir legenda). */
+function gestaoLink(): HTMLElement {
+  const a = h('a', { class: 'ui-counter', text: '🎬 Gestão', title: 'Aprovar cortes, corrigir legendas e ver a esteira', attrs: { href: '/gestao', target: '_blank', rel: 'noopener', style: 'text-decoration:none' } });
+  onFila(() => {
+    const n = filaDoDaniel();
+    a.textContent = n > 0 ? `🎬 Gestão · ${n}` : '🎬 Gestão';
+    a.title = n > 0 ? `${n} corte(s) esperando você aprovar ou conferir` : 'Aprovar cortes, corrigir legendas e ver a esteira';
+  });
+  return a;
+}
 
 export class TopBar implements UiComponent {
   readonly el: HTMLElement;
@@ -147,7 +159,7 @@ export class TopBar implements UiComponent {
         'div',
         { class: 'ui-topbar__right' },
         // Aba Gestão da CorteLab (aprovar, corrigir legenda, esteira): página servida em /gestao.
-        h('a', { class: 'ui-counter', text: '🎬 Gestão', title: 'Aprovar cortes, corrigir legendas e ver a esteira', attrs: { href: '/gestao', target: '_blank', rel: 'noopener', style: 'text-decoration:none' } }),
+        gestaoLink(),
         viewGroup,
         panelGroup,
       ),

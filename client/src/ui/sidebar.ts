@@ -12,11 +12,13 @@ import { officeIsEmpty } from './overlays';
 import { createAgentRow, updateAgentRow } from './rows';
 import { createAccountChip, createProgress, updateAccountChip, updateProgress } from './widgets';
 import { tr } from '../../../shared/i18n';
+import { filaDaSala, onFila } from './cortelab';
 
 interface RoomRefs {
   head: HTMLButtonElement;
   name: HTMLElement;
   count: HTMLElement;
+  fila: HTMLElement;
   path: HTMLElement;
   accs: KeyedList<AccountInfo | string>;
   tasks: HTMLElement;
@@ -58,6 +60,8 @@ export class Sidebar implements UiComponent {
   private lastSelKey = '';
 
   constructor(private ctx: UiContext) {
+    // Selo de fila da CorteLab em cada sala (cortes esperando o setor).
+    onFila(() => this.ctx.invalidate());
     this.input = h('input', {
       class: 'ui-search__input',
       type: 'search',
@@ -198,6 +202,7 @@ export class Sidebar implements UiComponent {
   private createRoom(g: RoomGroup): HTMLElement {
     const name = h('span', { class: 'ui-room__name' });
     const count = h('span', { class: 'ui-room__count' });
+    const fila = h('span', { class: 'ui-room__fila', hidden: true });
     const accsEl = h('span', { class: 'ui-room__accs' });
     const path = h('span', { class: 'ui-room__path' });
     const tasksBar = createProgress(tr('Progresso das tarefas da sala'));
@@ -208,7 +213,7 @@ export class Sidebar implements UiComponent {
       'button',
       { class: 'ui-room__head', type: 'button' },
       swatch,
-      h('span', { class: 'ui-room__line' }, name, count, accsEl),
+      h('span', { class: 'ui-room__line' }, name, count, fila, accsEl),
       path,
       tasks,
     );
@@ -239,7 +244,7 @@ export class Sidebar implements UiComponent {
       create: (n) => this.createNode(n),
       update: (el, n) => this.updateNode(el, n),
     });
-    this.roomRefs.set(section, { head, name, count, path, accs, tasks, tasksBar, tasksText, nodes });
+    this.roomRefs.set(section, { head, name, count, fila, path, accs, tasks, tasksBar, tasksText, nodes });
     return section;
   }
 
@@ -250,6 +255,10 @@ export class Sidebar implements UiComponent {
     const present = g.agents.filter((a) => a.status !== 'offline').length;
     setText(r.count, String(present));
     setTitle(r.count, plural(present, tr('agente'), tr('agentes')));
+    const naFila = filaDaSala(g.room.name);
+    setHidden(r.fila, naFila === 0);
+    setText(r.fila, `▶ ${naFila}`);
+    setTitle(r.fila, tr('{0} na fila deste setor', [naFila]));
     setText(r.path, shortPath(g.room.path));
     setTitle(r.head, tr('{0}\nClique para ver a sala', [g.room.path]));
     setAttr(r.head, 'aria-label', tr('Sala {0}, {1}', [g.room.name, plural(present, tr('agente'), tr('agentes'))]));

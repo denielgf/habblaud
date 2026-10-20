@@ -151,9 +151,13 @@ const WALL_ART_TOP = 28;
  * Arte gerada por IA para um quadro/pôster: só do tamanho do lugar (quadros de 2 tiles nunca
  * recebem as pinturas largas); pôsteres só usam a arte da mesma variante do procedural. Puro.
  */
-export function pickWallArt(assets: WorldAssets | null, kind: 'painting' | 'poster', tiles: number, variant: string | undefined, seed: number): WallArtAsset | null {
+export function pickWallArt(assets: WorldAssets | null, kind: 'painting' | 'poster', tiles: number, variant: string | undefined, seed: number, roomName?: string): WallArtAsset | null {
   if (!assets) return null;
   let pool = assets.wallArt.filter((a) => a.kind === kind && a.tiles === tiles);
+  // Arte de uma sala específica (ex.: o quadro do setor): vai só nela e tem prioridade lá.
+  const own = roomName ? pool.filter((a) => a.rooms?.includes(roomName)) : [];
+  if (own.length) return own[(seed >>> 0) % own.length];
+  pool = pool.filter((a) => !a.rooms?.length);
   if (kind === 'poster' && variant) {
     // Variante sem arte pronta (ex.: os pôsteres da clínica) fica com o desenho procedural.
     const same = pool.filter((a) => a.variant === variant);
@@ -247,6 +251,8 @@ export function buildAreaVis(art: ArtModule, layout: AreaLayout, room: RoomState
 
   const wallItems: WallVis[] = [];
   let sign: WallVis | undefined;
+  // O quadro próprio da sala (manifesto com "rooms") entra uma vez só; os demais lugares seguem sorteados.
+  let ownArtUsed = false;
   for (const it of layout.wallItems) {
     const vis = toWallVis(it, layout.id);
     if (DYNAMIC_WALL.has(it.kind)) {
@@ -255,7 +261,8 @@ export function buildAreaVis(art: ArtModule, layout: AreaLayout, room: RoomState
       continue;
     }
     // quadros e pôsteres: arte de IA pronta (quando houver) no lugar do procedural
-    const ai = it.kind === 'painting' || it.kind === 'poster' ? pickWallArt(assets, it.kind, it.kind === 'poster' ? 1 : it.variant === 'wide' ? 4 : 2, it.variant, vis.seed) : null;
+    const ai = it.kind === 'painting' || it.kind === 'poster' ? pickWallArt(assets, it.kind, it.kind === 'poster' ? 1 : it.variant === 'wide' ? 4 : 2, it.variant, vis.seed, ownArtUsed ? undefined : room?.info.name) : null;
+    if (ai?.rooms?.length) ownArtUsed = true;
     if (ai && vis.on === 'face' && drawWallArtAsset(wctx, vis, ai)) continue;
     const s = wallSprites(art, it.kind, it.variant === 'wide' ? undefined : it.variant, 0, vis.seed);
     if (!s) continue;

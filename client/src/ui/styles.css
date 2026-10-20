@@ -9029,3 +9029,15 @@ html.is-replay #world {
     box-shadow: 0 -12px 24px rgba(5, 7, 12, 0.35);
   }
 }
+
+/* Selo de fila da CorteLab (cortes esperando o setor) */
+.ui-room__fila {
+  flex: none;
+  height: 16px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: #ff2d95;
+  color: #fff;
+  font: 700 10.5px/16px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}

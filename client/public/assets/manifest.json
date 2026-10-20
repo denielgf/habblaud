@@ -254,6 +254,209 @@
       "tiles": 1,
       "title": "Ship it!",
       "variant": "ship_it"
+    },
+    {
+      "id": "cortelab-diretoria",
+      "kind": "painting",
+      "file": "art/cortelab/diretoria_arte.png",
+      "w": 26,
+      "h": 16,
+      "tiles": 2,
+      "title": "Setor Diretoria (CorteLab)",
+      "rooms": [
+        "Diretoria"
+      ],
+      "framed": {
+        "file": "art/cortelab/diretoria_quadro.png",
+        "w": 32,
+        "h": 22
+      }
+    },
+    {
+      "id": "cortelab-captacao",
+      "kind": "painting",
+      "file": "art/cortelab/captacao_arte.png",
+      "w": 26,
+      "h": 16,
+      "tiles": 2,
+      "title": "Setor Captação (CorteLab)",
+      "rooms": [
+        "Captação"
+      ],
+      "framed": {
+        "file": "art/cortelab/captacao_quadro.png",
+        "w": 32,
+        "h": 22
+      }
+    },
+    {
+      "id": "cortelab-edicao",
+      "kind": "painting",
+      "file": "art/cortelab/edicao_arte.png",
+      "w": 26,
+      "h": 16,
+      "tiles": 2,
+      "title": "Setor Edição (CorteLab)",
+      "rooms": [
+        "Edição"
+      ],
+      "framed": {
+        "file": "art/cortelab/edicao_quadro.png",
+        "w": 32,
+        "h": 22
+      }
+    },
+    {
+      "id": "cortelab-redacao",
+      "kind": "painting",
+      "file": "art/cortelab/redacao_arte.png",
+      "w": 26,
+      "h": 16,
+      "tiles": 2,
+      "title": "Setor Redação (CorteLab)",
+      "rooms": [
+        "Redação"
+      ],
+      "framed": {
+        "file": "art/cortelab/redacao_quadro.png",
+        "w": 32,
+        "h": 22
+      }
+    },
+    {
+      "id": "cortelab-qualidade",
+      "kind": "painting",
+      "file": "art/cortelab/qualidade_arte.png",
+      "w": 26,
+      "h": 16,
+      "tiles": 2,
+      "title": "Setor Qualidade (CorteLab)",
+      "rooms": [
+        "Qualidade"
+      ],
+      "framed": {
+        "file": "art/cortelab/qualidade_quadro.png",
+        "w": 32,
+        "h": 22
+      }
+    },
+    {
+      "id": "cortelab-distribuicao",
+      "kind": "painting",
+      "file": "art/cortelab/distribuicao_arte.png",
+      "w": 26,
+      "h": 16,
+      "tiles": 2,
+      "title": "Setor Distribuição (CorteLab)",
+      "rooms": [
+        "Distribuição"
+      ],
+      "framed": {
+        "file": "art/cortelab/distribuicao_quadro.png",
+        "w": 32,
+        "h": 22
+      }
+    },
+    {
+      "id": "cortelab-melhoria",
+      "kind": "painting",
+      "file": "art/cortelab/melhoria_arte.png",
+      "w": 26,
+      "h": 16,
+      "tiles": 2,
+      "title": "Setor Melhoria (CorteLab)",
+      "rooms": [
+        "Melhoria"
+      ],
+      "framed": {
+        "file": "art/cortelab/melhoria_quadro.png",
+        "w": 32,
+        "h": 22
+      }
+    },
+    {
+      "id": "cortelab-diretoria-poster",
+      "kind": "poster",
+      "file": "art/cortelab/diretoria_poster.png",
+      "w": 12,
+      "h": 16,
+      "tiles": 1,
+      "title": "Pôster do setor Diretoria (CorteLab)",
+      "rooms": [
+        "Diretoria"
+      ]
+    },
+    {
+      "id": "cortelab-captacao-poster",
+      "kind": "poster",
+      "file": "art/cortelab/captacao_poster.png",
+      "w": 12,
+      "h": 16,
+      "tiles": 1,
+      "title": "Pôster do setor Captação (CorteLab)",
+      "rooms": [
+        "Captação"
+      ]
+    },
+    {
+      "id": "cortelab-edicao-poster",
+      "kind": "poster",
+      "file": "art/cortelab/edicao_poster.png",
+      "w": 12,
+      "h": 16,
+      "tiles": 1,
+      "title": "Pôster do setor Edição (CorteLab)",
+      "rooms": [
+        "Edição"
+      ]
+    },
+    {
+      "id": "cortelab-redacao-poster",
+      "kind": "poster",
+      "file": "art/cortelab/redacao_poster.png",
+      "w": 12,
+      "h": 16,
+      "tiles": 1,
+      "title": "Pôster do setor Redação (CorteLab)",
+      "rooms": [
+        "Redação"
+      ]
+    },
+    {
+      "id": "cortelab-qualidade-poster",
+      "kind": "poster",
+      "file": "art/cortelab/qualidade_poster.png",
+      "w": 12,
+      "h": 16,
+      "tiles": 1,
+      "title": "Pôster do setor Qualidade (CorteLab)",
+      "rooms": [
+        "Qualidade"
+      ]
+    },
+    {
+      "id": "cortelab-distribuicao-poster",
+      "kind": "poster",
+      "file": "art/cortelab/distribuicao_poster.png",
+      "w": 12,
+      "h": 16,
+      "tiles": 1,
+      "title": "Pôster do setor Distribuição (CorteLab)",
+      "rooms": [
+        "Distribuição"
+      ]
+    },
+    {
+      "id": "cortelab-melhoria-poster",
+      "kind": "poster",
+      "file": "art/cortelab/melhoria_poster.png",
+      "w": 12,
+      "h": 16,
+      "tiles": 1,
+      "title": "Pôster do setor Melhoria (CorteLab)",
+      "rooms": [
+        "Melhoria"
+      ]
     }
   ],
   "og": "og-image.png"
