@@ -7,7 +7,7 @@ import type { WorldAssets } from '../assets';
 import type { Camera } from '../camera';
 import { BUILDING_H, COL_W, CORE_COLS, CORRIDOR_Y } from '../constants';
 import { layoutExterior, slotShell, type ExteriorLayout, type SlotShell } from '../layout/exterior';
-import { slotAt } from '../layout/geometry';
+import { isCoreCol, slotAt } from '../layout/geometry';
 import type { ExteriorProp } from '../layout/types';
 import { screenModeFor } from '../sim/behavior';
 import type { Character } from '../sim/character';
@@ -192,7 +192,8 @@ export class Renderer {
     for (let x = this.baseX + 4; x < this.baseX + c.width; x += 24) ctx.fillRect(x, ly, 12, 2);
     this.shells = [];
     this.shellWindows = [];
-    for (let col = CORE_COLS; col < cols; col++) {
+    for (let col = 0; col < cols; col++) {
+      if (isCoreCol(col)) continue;   // o núcleo pode estar no meio (prédio em dois blocos)
       for (const side of ['north', 'south'] as const) {
         const sh = slotShell(slotAt(col, side), col === cols - 1);
         this.shells.push(sh);

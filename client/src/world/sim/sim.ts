@@ -7,7 +7,7 @@ import type { WorldOptions } from '../api';
 import { COL_W, COMPACT_DELAY_MS, DISMANTLE_DELAY_MS, FOOT_DX, FOOT_DY, MISSING_DEBOUNCE_MS, RUN_SPEED, TILE, WALK_SPEED } from '../constants';
 import { assembleBuilding, type BuildingLayout } from '../layout/building';
 import { RECEPTION_ID } from '../layout/core';
-import { columnsFor, inRect } from '../layout/geometry';
+import { columnsFor, EAST_SLOT_BASE, getWestCols, inRect, isEastSlot, setWestCols, westColsFor } from '../layout/geometry';
 import { layoutProjectRoom } from '../layout/room';
 import type { SpotDef, SpotKind } from '../layout/types';
 import { PathFinder } from '../path/astar';
@@ -231,19 +231,19 @@ export class Sim {
     } catch {
       theme = FALLBACK_THEME;
     }
-    // a primeira vaga livre do prédio (o slot do servidor só dá a ordem de chegada)
-    const slot = this.freeSlot();
+    // a primeira vaga livre do prédio (o slot do servidor só dá a ordem de chegada e o bloco)
+    const slot = this.freeSlot(isEastSlot(r.slot));
     const layout = layoutProjectRoom({ id: r.id, slot, seed: r.seed }, theme);
     const rs = new RoomState(r, theme, layout, first ? 'ready' : 'building', now, first, slot);
     this.rooms.set(r.id, rs);
     return rs;
   }
 
-  /** Menor vaga sem sala (contando as que ainda estão desmontando). */
-  private freeSlot(): number {
+  /** Menor vaga sem sala no bloco (contando as que ainda estão desmontando). */
+  private freeSlot(east = false): number {
     const used = new Set<number>();
     for (const r of this.rooms.values()) if (r.phase !== 'gone') used.add(r.slot);
-    let slot = 0;
+    let slot = east ? EAST_SLOT_BASE : 0;
     while (used.has(slot)) slot++;
     return slot;
   }
@@ -492,6 +492,13 @@ export class Sim {
   /** Recalcula o prédio (largura, grade, spots) a partir das salas presentes. */
   relayout(force = false): void {
     const present = [...this.rooms.values()].filter((r) => r.present);
+    // prédio em dois blocos: se o bloco oeste mudou de largura, o núcleo e o bloco leste andam,
+    // então todas as salas são redesenhadas no lugar novo (os ids dos lugares não mudam)
+    const west = westColsFor(present.map((r) => r.slot));
+    if (west !== getWestCols()) {
+      setWestCols(west);
+      for (const r of this.rooms.values()) r.layout = layoutProjectRoom({ id: r.id, slot: r.slot, seed: r.seed }, r.theme);
+    }
     let cols = columnsFor(present.map((r) => r.slot));
     const cur = this.building.cols;
     if (cols < cur && !force) {
@@ -619,10 +626,19 @@ export class Sim {
    * vez, só sala pronta e com a sessão aberta; o prédio encolhe quando o endereço antigo é desmontado.
    */
   private compact(now: number): void {
-    const free = this.freeSlot();
+    // cada bloco se compacta sozinho: sala do bloco oeste nunca vai para o leste e vice-versa
+    let free = 0;
     let far: RoomState | null = null;
-    for (const r of this.rooms.values()) {
-      if (r.slot > free && !r.ghost && r.listed && r.phase === 'ready' && (!far || r.slot > far.slot)) far = r;
+    for (const east of [false, true]) {
+      const f = this.freeSlot(east);
+      for (const r of this.rooms.values()) {
+        if (isEastSlot(r.slot) !== east) continue;
+        if (r.slot > f && !r.ghost && r.listed && r.phase === 'ready' && (!far || r.slot > far.slot)) {
+          far = r;
+          free = f;
+        }
+      }
+      if (far) break;
     }
     if (!far) {
       this.gapSince = 0;

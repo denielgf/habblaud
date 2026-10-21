@@ -22,6 +22,8 @@ export function pathKey(p: string): string {
 export interface FixedRoom {
   path: string;
   name?: string;
+  /** Slot fixo, quando HABBLAUD_FIXED_ROOMS divide o prédio em dois blocos com "|". */
+  slot?: number;
 }
 
 /**
@@ -29,16 +31,29 @@ export interface FixedRoom {
  * da pasta). O "=" é procurado só antes do caminho começar, então pastas com "=" no nome continuam válidas.
  */
 export function parseFixedRooms(raw: string | undefined): FixedRoom[] {
-  return (raw ?? '')
+  const entries = (raw ?? '')
     .split(';')
     .map((e) => e.trim())
-    .filter(Boolean)
-    .map((e) => {
-      const m = /^([^=\\/:]+)=(.+)$/.exec(e);
-      return m ? { name: m[1].trim(), path: m[2].trim() } : { path: e };
-    })
-    .filter((r) => r.path);
+    .filter(Boolean);
+  // "|" sozinho separa os blocos do prédio: as salas antes dele ficam no bloco oeste (slots 0, 1, 2...)
+  // e as depois no bloco leste (EAST_SLOT_BASE, +1...), com a área comum no meio
+  const split = entries.indexOf('|');
+  let west = 0;
+  let east = 0;
+  const out: FixedRoom[] = [];
+  for (const [i, e] of entries.entries()) {
+    if (e === '|') continue;
+    const m = /^([^=\\/:]+)=(.+)$/.exec(e);
+    const room: FixedRoom = m ? { name: m[1].trim(), path: m[2].trim() } : { path: e };
+    if (!room.path) continue;
+    if (split >= 0) room.slot = i < split ? west++ : EAST_SLOT_BASE + east++;
+    out.push(room);
+  }
+  return out;
 }
+
+/** Primeiro slot do bloco leste do prédio (o cliente usa o mesmo número em layout/geometry.ts). */
+export const EAST_SLOT_BASE = 1000;
 
 export function normalizeCwd(cwd: string): string {
   const p = cwd.trim().replace(/\/{2,}/g, '/');
@@ -88,11 +103,17 @@ export function roomDisplayNames(rooms: ReadonlyMap<string, string>): Map<string
 export class SlotAllocator {
   private slots = new Map<string, number>();
   private freedAt = new Map<number, number>();
+  /** Salas com slot reservado (salas fixas de um prédio em dois blocos). */
+  private pinned = new Map<string, number>();
 
   constructor(private readonly cooldownMs = 30_000) {}
 
+  pin(id: string, slot: number): void {
+    this.pinned.set(id, slot);
+  }
+
   /** Ajusta as alocações ao conjunto atual de salas. Devolve true se algo mudou. */
-  sync(ids: Iterable<string>, now: number): boolean {
+  sync(ids: Iterable<string>, now: number, eastOf: (id: string) => boolean = () => false): boolean {
     const live = new Set(ids);
     let changed = false;
     for (const [id, slot] of [...this.slots]) {
@@ -103,7 +124,7 @@ export class SlotAllocator {
     }
     for (const id of live) {
       if (this.slots.has(id)) continue;
-      this.slots.set(id, this.firstFree(now));
+      this.slots.set(id, this.pinned.get(id) ?? this.firstFree(now, eastOf(id)));
       changed = true;
     }
     return changed;
@@ -113,9 +134,9 @@ export class SlotAllocator {
     return this.slots.get(id);
   }
 
-  private firstFree(now: number): number {
-    const used = new Set(this.slots.values());
-    for (let slot = 0; ; slot++) {
+  private firstFree(now: number, east = false): number {
+    const used = new Set([...this.slots.values(), ...this.pinned.values()]);
+    for (let slot = east ? EAST_SLOT_BASE : 0; ; slot++) {
       if (used.has(slot)) continue;
       const freed = this.freedAt.get(slot);
       if (freed !== undefined && now - freed < this.cooldownMs) continue;

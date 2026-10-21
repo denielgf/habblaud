@@ -86,3 +86,16 @@ describe('salas fixas (HABBLAUD_FIXED_ROOMS)', () => {
     expect(office.commit().snapshot.rooms.map((r) => r.name)).toEqual(['Diretoria', 'Ilha de edição']);
   });
 });
+
+describe('salas fixas em dois blocos', () => {
+  it('"|" separa o bloco oeste (0, 1...) do leste (1000, 1001...)', () => {
+    expect(parseFixedRooms('A=C:\a;B=C:\b;|;C=C:\c')).toEqual([
+      { name: 'A', path: 'C:\a', slot: 0 },
+      { name: 'B', path: 'C:\b', slot: 1 },
+      { name: 'C', path: 'C:\c', slot: 1000 },
+    ]);
+  });
+  it('sem "|" não reserva slot', () => {
+    expect(parseFixedRooms('A=C:\a;B=C:\b')[1].slot).toBeUndefined();
+  });
+});

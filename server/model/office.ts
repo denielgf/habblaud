@@ -30,7 +30,7 @@ import { describeGitHubEvent, githubEventKey, RoomEffects, type GitHubEvent } fr
 import { hash32 } from '../../shared/hash';
 import { applyPermission } from '../permissions/registry';
 import type { NameStore, StoredCharacter } from './names';
-import { type FixedRoom, normalizeCwd, pathKey, roomDisplayNames, SlotAllocator } from './rooms';
+import { EAST_SLOT_BASE, type FixedRoom, normalizeCwd, pathKey, roomDisplayNames, SlotAllocator } from './rooms';
 import { tr } from '../../shared/i18n';
 
 export const OFFLINE_GRACE_MS = 20_000;
@@ -231,8 +231,30 @@ export class Office {
       this.rooms.set(id, { path: f.path, createdAt: now });
       this.fixedByKey.set(pathKey(f.path), id);
       if (f.name) this.fixedNames.set(id, f.name);
+      if (f.slot !== undefined) this.slots.pin(id, f.slot);
     }
     if (this.rooms.size) this.recomputeRoomNames();
+  }
+
+  /**
+   * Prédio em dois blocos: uma sala que não é fixa vai para o bloco da sala fixa cuja pasta mais se parece com
+   * a dela (maior prefixo comum). Ex.: uma sessão na raiz da agência fica no bloco dos setores da agência.
+   */
+  private eastBlock(path: string): boolean {
+    const key = pathKey(path);
+    let best = -1;
+    let east = false;
+    for (const f of this.deps.fixedRooms ?? []) {
+      if (f.slot === undefined) continue;
+      const fk = pathKey(f.path);
+      let n = 0;
+      while (n < key.length && n < fk.length && key[n] === fk[n]) n++;
+      if (n > best) {
+        best = n;
+        east = f.slot >= EAST_SLOT_BASE;
+      }
+    }
+    return east;
   }
 
   /** Avisado (síncrono) sempre que algo muda; o hub decide quando fazer commit(). */
@@ -972,7 +994,7 @@ export class Office {
     const now = this.now();
     const entries = new Map(this.rooms);
     for (const r of this.demoSnap?.rooms ?? []) entries.set(r.id, { path: r.path, createdAt: r.createdAt });
-    this.slots.sync(entries.keys(), now);
+    this.slots.sync(entries.keys(), now, (id) => this.eastBlock(entries.get(id)?.path ?? id));
     const rooms: RoomInfo[] = [...entries]
       .map(([id, r]) => ({
         id,
